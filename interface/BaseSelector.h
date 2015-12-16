@@ -110,7 +110,6 @@ template <class EventClass> bool  BaseSelector<EventClass>::Process(Long64_t ent
     if (!op->process(ev_)) return false; 
   }
 
-
   return true;
 }
 
@@ -118,6 +117,11 @@ template <class EventClass> bool  BaseSelector<EventClass>::Process(Long64_t ent
 // all entries have been processed (executed in slave)
 template <class EventClass> void BaseSelector<EventClass>::SlaveTerminate()
 {
+
+
+   for (auto & op : ops_) {                
+     op->output(std::cout); 
+   }
 
 }
 
