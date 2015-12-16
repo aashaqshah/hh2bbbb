@@ -4,12 +4,15 @@
 
 #include <vector>
 #include <string>
+#include <memory>
 
 #include <TROOT.h>
 #include <TChain.h>
 #include <TFile.h>
 #include <TSelector.h>
 #include <TTreeReader.h>
+
+#include "BaseOperator.h"
 
 
 
@@ -18,13 +21,16 @@ template <class EventClass> class BaseSelector : public TSelector {
 
   public:
 
-    long n_entries{0};
+  long n_entries{0};
 
-    // associated with a TTree
-    TTreeReader reader_;
+  // associated with a TTree
+  TTreeReader reader_;
 
-    // event class 
-    EventClass ev_; 
+  // event class 
+  EventClass ev_; 
+
+  // vector of operations
+  std::vector<std::unique_ptr<BaseOperator<EventClass>>> ops_;
 
 
   BaseSelector(TTree * /*tree*/ =0, std::vector<std::string> hlt_bits = {}) :
@@ -33,6 +39,11 @@ template <class EventClass> class BaseSelector : public TSelector {
        
     }
   virtual ~BaseSelector() {}
+
+  virtual bool addOperator( BaseOperator<EventClass> * op ) { 
+    ops_.emplace_back(op);
+    return true;
+  }
 
   // TSelector functions
   virtual Int_t   Version() const { return 2; }
@@ -94,6 +105,10 @@ template <class EventClass> bool  BaseSelector<EventClass>::Process(Long64_t ent
   reader_.SetLocalEntry(entry);
   // update event objects
   ev_.update();
+
+  for (auto & op : ops_) {
+    if (!op->process(ev_)) return false; 
+  }
 
 
   return true;

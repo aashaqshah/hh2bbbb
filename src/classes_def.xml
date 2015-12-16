@@ -1,4 +1,5 @@
 <lcgdict>
   <class name="Event"/>
   <class name="BaseSelector<Event>"/>
+  <class name="ExampleOperator<Event>"/>
 </lcgdict>  
