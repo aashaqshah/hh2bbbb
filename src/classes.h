@@ -1,8 +1,11 @@
 
 #include "di-higgs/hh2bbbb/interface/BaseSelector.h"
+#include "di-higgs/hh2bbbb/interface/Event.h"
+
 
 namespace {
   struct hh4bbbb {
-    BaseSelector dummy0;
+    Event dummy0; 
+    BaseSelector<Event> dummy1;
   };
 }

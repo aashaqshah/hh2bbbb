@@ -11,13 +11,10 @@
 #include <TSelector.h>
 #include <TTreeReader.h>
 
-#include "JetCollection.h"
-#include "MET.h"
-#include "GenParticleCollection.h"
-#include "EventInfo.h"
 
 
-class BaseSelector : public TSelector {
+
+template <class EventClass> class BaseSelector : public TSelector {
 
   public:
 
@@ -26,26 +23,14 @@ class BaseSelector : public TSelector {
     // associated with a TTree
     TTreeReader reader_;
 
-    // event content
-    EventInfo eventInfo_;
-    JetCollection jets_;
-    MET met_;
-    GenParticleCollection h_bosons_; 
-    GenParticleCollection b_quarks_; // from higgs
+    // event class 
+    EventClass ev_; 
 
 
-
-  BaseSelector(TTree * /*tree*/ =0, bool isHH = false,
-               std::vector<std::string> hlt_bits = {}) :
-    eventInfo_(reader_, hlt_bits),
-  	jets_(reader_),
-    met_(reader_) 
+  BaseSelector(TTree * /*tree*/ =0, std::vector<std::string> hlt_bits = {}) :
+    ev_(reader_, hlt_bits)
     {
        
-      if (isHH) {
-        h_bosons_ = GenParticleCollection(reader_, "GenHiggsBoson");   
-        b_quarks_ = GenParticleCollection(reader_, "GenBQuarkFromH"); 
-      }
     }
   virtual ~BaseSelector() {}
 
@@ -54,8 +39,8 @@ class BaseSelector : public TSelector {
   virtual void    Begin(TTree *tree);
   virtual void    SlaveBegin(TTree *tree);
   virtual void    Init(TTree *tree);
-  virtual Bool_t  Notify();
-  virtual Bool_t  Process(Long64_t entry);
+  virtual bool    Notify();
+  virtual bool    Process(Long64_t entry);
   virtual void    SetOption(const char *option) { fOption = option; }
   virtual void    SetObject(TObject *obj) { fObject = obj; }
   virtual void    SetInputList(TList *input) { fInput = input; }
@@ -67,19 +52,62 @@ class BaseSelector : public TSelector {
 
 #endif
 
-#ifdef BaseSelector_cxx
-
 // each new tree is opened
-void BaseSelector::Init(TTree *tree)
+template <class EventClass> void BaseSelector<EventClass>::Init(TTree *tree)
+
 {
   reader_.SetTree(tree);
 }
 
 // each new file is opened
-Bool_t BaseSelector::Notify()
+template <class EventClass> bool BaseSelector<EventClass>::Notify()
 {
 
    return kTRUE;
 }
 
-#endif // #ifdef BaseSelector_cxx
+/// start of query (executed on client)
+template <class EventClass> void BaseSelector<EventClass>::Begin(TTree * /*tree*/)
+{
+
+   std::string option = GetOption();
+
+}
+
+// right after begin (executed on slave)
+template <class EventClass> void BaseSelector<EventClass>::SlaveBegin(TTree * /*tree*/)
+{
+
+   std::string option = GetOption();
+
+}
+
+
+// for each entry of the TTree
+template <class EventClass> bool  BaseSelector<EventClass>::Process(Long64_t entry)
+{
+
+  n_entries++;
+  if ((n_entries%10000) == 0) std::cout << "processing " << n_entries << " entry" << std::endl; 
+
+  // set TTreeReader entry
+  reader_.SetLocalEntry(entry);
+  // update event objects
+  ev_.update();
+
+
+  return true;
+}
+
+
+// all entries have been processed (executed in slave)
+template <class EventClass> void BaseSelector<EventClass>::SlaveTerminate()
+{
+
+}
+
+// last function called (on client)
+template <class EventClass> void BaseSelector<EventClass>::Terminate()
+{
+
+}

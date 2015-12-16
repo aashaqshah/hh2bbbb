@@ -3,4 +3,7 @@
 <use name="rootcore"/>
 <use name="rootgraphics"/>
 <flags CXXFLAGS="-lGenVector"/>
+<export>
+    <lib name="1"/>
+</export>
 

@@ -1,3 +1,4 @@
 <lcgdict>
-  <class name="BaseSelector"/>
+  <class name="Event"/>
+  <class name="BaseSelector<Event>"/>
 </lcgdict>  
