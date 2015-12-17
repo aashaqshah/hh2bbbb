@@ -6,4 +6,5 @@
   <class name="EventCounter<Event>"/>
   <class name="JetSelection<Event>"/>
   <class name="BTagJetSelection<Event>"/>
+  <class name="DiJetPairSelection<Event>"/>
 </lcgdict>  

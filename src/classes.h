@@ -6,6 +6,7 @@
 #include "di-higgs/hh2bbbb/interface/EventCounter.h"
 #include "di-higgs/hh2bbbb/interface/JetSelection.h"
 #include "di-higgs/hh2bbbb/interface/BTagJetSelection.h"
+#include "di-higgs/hh2bbbb/interface/DiJetPairSelection.h"
 
 
 namespace {
@@ -17,5 +18,6 @@ namespace {
     EventCounter<Event> dummy4;
     JetSelection<Event> dummy5;
     BTagJetSelection<Event> dummy6;
+    DiJetPairSelection<Event> dummy7;
   };
 }
