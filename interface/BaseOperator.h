@@ -13,7 +13,7 @@ template <class EventClass> class BaseOperator {
       return true;
     }
 
-    virtual bool output( TFile & tfile ) {
+    virtual bool output( std::unique_ptr<TFile> & tfile ) {
       return false;
     }   
 

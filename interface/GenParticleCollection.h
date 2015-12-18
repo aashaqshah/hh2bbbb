@@ -13,28 +13,28 @@
 
 #include "mut_framework/mut_dataformats/interface/Candidate.h"
 
-typedef ROOT::Math::PtEtaPhiMVector PtEtaPhiMVector;
+  typedef ROOT::Math::PtEtaPhiMVector PtEtaPhiMVector;
 
-class GenParticleCollection : public std::vector<mut::Candidate> {
+  class GenParticleCollection : public std::vector<mut::Candidate> {
 
-  public:
+    public:
 
-    // TTreeReaderValues for reading from VHBB_HEPPY
-    TTreeReaderArray<float> * gen_particle_pts_;
-    TTreeReaderArray<float> * gen_particle_etas_;
-    TTreeReaderArray<float> * gen_particle_phis_;
-    TTreeReaderArray<float> * gen_particle_masss_;
+      // TTreeReaderValues for reading from VHBB_HEPPY
+      TTreeReaderArray<float> * gen_particle_pts_;
+      TTreeReaderArray<float> * gen_particle_etas_;
+      TTreeReaderArray<float> * gen_particle_phis_;
+      TTreeReaderArray<float> * gen_particle_masss_;
 
-    GenParticleCollection() :
-      gen_particle_pts_(nullptr),
-      gen_particle_etas_(nullptr),
-      gen_particle_phis_(nullptr),
-      gen_particle_masss_(nullptr)
-    {
-    }
-    
-    GenParticleCollection(TTreeReader & reader, std::string obj_name) : 
-     gen_particle_pts_(  new TTreeReaderArray<float>(reader, (obj_name+"_pt").c_str())),
+      GenParticleCollection() :
+        gen_particle_pts_(nullptr),
+        gen_particle_etas_(nullptr),
+        gen_particle_phis_(nullptr),
+        gen_particle_masss_(nullptr)
+      {
+      }
+      
+      GenParticleCollection(TTreeReader & reader, std::string obj_name) : 
+       gen_particle_pts_(  new TTreeReaderArray<float>(reader, (obj_name+"_pt").c_str())),
      gen_particle_etas_( new TTreeReaderArray<float>(reader, (obj_name+"_eta").c_str())),
      gen_particle_phis_( new TTreeReaderArray<float>(reader, (obj_name+"_phi").c_str())),
      gen_particle_masss_(new TTreeReaderArray<float>(reader, (obj_name+"_mass").c_str()))

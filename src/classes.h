@@ -7,6 +7,7 @@
 #include "di-higgs/hh2bbbb/interface/JetSelection.h"
 #include "di-higgs/hh2bbbb/interface/BTagJetSelection.h"
 #include "di-higgs/hh2bbbb/interface/DiJetPairSelection.h"
+#include "di-higgs/hh2bbbb/interface/DiHiggsPlotter.h"
 
 
 namespace {
@@ -18,6 +19,14 @@ namespace {
     EventCounter<Event> dummy4;
     JetSelection<Event> dummy5;
     BTagJetSelection<Event> dummy6;
-    DiJetPairSelection<Event> dummy7;
+    ExtEvent dummy8; 
+    BaseSelector<ExtEvent> dummy9;
+    ExampleOperator<ExtEvent> dummy10;
+    TriggerFilter<ExtEvent> dummy11;
+    EventCounter<Event> dummy12;
+    JetSelection<ExtEvent> dummy13;
+    BTagJetSelection<ExtEvent> dummy14;
+    DiJetPairSelection<ExtEvent> dummy15;
+    DiHiggsPlotter<ExtEvent> dummy16;
   };
 }

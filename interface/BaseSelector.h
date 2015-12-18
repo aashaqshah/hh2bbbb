@@ -25,6 +25,8 @@ template <class EventClass> class BaseSelector : public TSelector {
 
   // associated with a TTree
   TTreeReader reader_;
+  // to save output 
+  std::unique_ptr<TFile> tfile_{new TFile("output.root", "RECREATE")}; 
 
   // event class 
   EventClass ev_; 
@@ -122,6 +124,14 @@ template <class EventClass> void BaseSelector<EventClass>::SlaveTerminate()
    for (auto & op : ops_) {                
      op->output(std::cout); 
    }
+
+   
+   for (auto & op : ops_) {                
+     op->output(tfile_); 
+   } 
+
+   tfile_->Write();
+
 
 }
 
