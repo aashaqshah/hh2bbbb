@@ -20,6 +20,7 @@
     public:
 
       // TTreeReaderValues for reading from VHBB_HEPPY
+      // had to use raw pointers because TTreeReaderArray is badly implemented
       TTreeReaderArray<float> * gen_particle_pts_;
       TTreeReaderArray<float> * gen_particle_etas_;
       TTreeReaderArray<float> * gen_particle_phis_;
@@ -33,38 +34,52 @@
       {
       }
       
-      GenParticleCollection(TTreeReader & reader, std::string obj_name) : 
-       gen_particle_pts_(  new TTreeReaderArray<float>(reader, (obj_name+"_pt").c_str())),
-     gen_particle_etas_( new TTreeReaderArray<float>(reader, (obj_name+"_eta").c_str())),
-     gen_particle_phis_( new TTreeReaderArray<float>(reader, (obj_name+"_phi").c_str())),
-     gen_particle_masss_(new TTreeReaderArray<float>(reader, (obj_name+"_mass").c_str()))
+      GenParticleCollection(TTreeReader & reader, std::string obj_name, bool load = false)
     {
+      if (load) { 
+        gen_particle_pts_   = new TTreeReaderArray<float>(reader, (obj_name+"_pt").c_str());
+        gen_particle_etas_  = new TTreeReaderArray<float>(reader, (obj_name+"_eta").c_str());
+        gen_particle_phis_  = new TTreeReaderArray<float>(reader, (obj_name+"_phi").c_str());
+        gen_particle_masss_ = new TTreeReaderArray<float>(reader, (obj_name+"_mass").c_str());
+      } else {
+        gen_particle_pts_   = nullptr;
+        gen_particle_etas_  = nullptr;
+        gen_particle_phis_  = nullptr;
+        gen_particle_masss_ = nullptr;
+      }
     } 
 
-    ~GenParticleCollection() {}
+    ~GenParticleCollection() {
+      delete gen_particle_pts_; 
+      delete gen_particle_etas_; 
+      delete gen_particle_phis_; 
+      delete gen_particle_masss_; 
+    }
     
     void update() {
 
-      // delete previous elements
-      this->clear();
+      if (gen_particle_pts_ != nullptr) {
 
-      // jets ordered in pt
-      std::vector<int> order(gen_particle_pts_->GetSize());
-      std::iota(order.begin(), order.end(), 0); 
-      auto comparator = [&](int a, int b){ return (*gen_particle_pts_)[a] > (*gen_particle_pts_)[b]; };
-      std::sort(order.begin(), order.end(), comparator);
+        // delete previous elements
+        this->clear();
 
-      // iterate over jets in order 
-      for (const auto & i : order) {
-        
-        PtEtaPhiMVector gen_particle_lv((*gen_particle_pts_)[i],
-                                        (*gen_particle_etas_)[i],
-                                        (*gen_particle_phis_)[i],
-                                        (*gen_particle_masss_)[i]); 
-        // new element using constructor from PtEtaPhiM
-      	this->emplace_back(gen_particle_lv);
-        
+        // use default order
+        std::vector<int> order(gen_particle_pts_->GetSize());
+        std::iota(order.begin(), order.end(), 0); 
+
+        // iterate over particles in order 
+        for (const auto & i : order) {
+          
+          PtEtaPhiMVector gen_particle_lv((*gen_particle_pts_)[i],
+                                          (*gen_particle_etas_)[i],
+                                          (*gen_particle_phis_)[i],
+                                          (*gen_particle_masss_)[i]); 
+          // new element using constructor from PtEtaPhiM
+        	this->emplace_back(gen_particle_lv);
+          
+        }
       }
     }
+    
 };
 

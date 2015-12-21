@@ -15,13 +15,15 @@ class Event {
     EventInfo eventInfo_;
     JetCollection jets_;
     MET met_;
+    GenParticleCollection b_quarks_hs_;
 
     Event() {}
 
-    Event(TTreeReader & reader, std::vector<std::string> hlt_bits) :
+    Event(TTreeReader & reader, std::vector<std::string> hlt_bits, bool isHH = false) :
      eventInfo_(reader, hlt_bits),  
    	 jets_(reader),
-     met_(reader)
+     met_(reader),
+     b_quarks_hs_(reader, "GenBQuarkFromH", isHH)
      {}                   
 
     virtual ~Event() {};
@@ -30,6 +32,7 @@ class Event {
       eventInfo_.update();
       jets_.update();
       met_.update();
+      b_quarks_hs_.update();
 
     }
 
@@ -41,6 +44,7 @@ class ExtEvent : public Event {
   public:
 
   CandidateCollection dijets_; 
+  std::vector<std::set<std::size_t>> reco_jet_matchs_; 
 
   // inherit constructors
   using Event::Event;
@@ -49,6 +53,7 @@ class ExtEvent : public Event {
   virtual void update() {
     Event::update();
     dijets_.clear();
+    reco_jet_matchs_.clear();
   }
 
 };

@@ -8,6 +8,7 @@
 #include "di-higgs/hh2bbbb/interface/BTagJetSelection.h"
 #include "di-higgs/hh2bbbb/interface/DiJetPairSelection.h"
 #include "di-higgs/hh2bbbb/interface/DiHiggsPlotter.h"
+#include "di-higgs/hh2bbbb/interface/GenJetMatcher.h"
 
 
 namespace {
@@ -28,5 +29,7 @@ namespace {
     BTagJetSelection<ExtEvent> dummy14;
     DiJetPairSelection<ExtEvent> dummy15;
     DiHiggsPlotter<ExtEvent> dummy16;
+    GenJetMatcher<ExtEvent> dummy17;
+    HHJetsMatched<ExtEvent> dummy18;
   };
 }

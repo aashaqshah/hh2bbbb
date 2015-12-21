@@ -15,4 +15,6 @@
   <class name="BTagJetSelection<ExtEvent>"/>
   <class name="DiJetPairSelection<ExtEvent>"/>
   <class name="DiHiggsPlotter<ExtEvent>"/>
+  <class name="GenJetMatcher<ExtEvent>"/>
+  <class name="HHJetsMatched<ExtEvent>"/>
 </lcgdict>  

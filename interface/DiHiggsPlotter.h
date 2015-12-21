@@ -33,7 +33,6 @@ template <class EventClass> class DiHiggsPlotter : public BaseOperator<EventClas
       h_H0_mass.Write();
       h_H1_mass.Write();
       h_H0_H1_mass.Write();
-
       return true;
 
     }

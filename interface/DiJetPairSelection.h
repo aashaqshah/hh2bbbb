@@ -7,12 +7,11 @@
 #include "mut_framework/mut_utils/interface/combinations.h"
 #include "mut_framework/mut_utils/interface/prettyprint.hpp"
 
-
 template <class EventClass> class DiJetPairSelection : public BaseOperator<EventClass> {
 
   public:
 
-    typedef std::vector<int>::iterator It;
+    typedef std::vector<std::size_t>::iterator It;
     std::size_t n_fix_jets_;
 
 
@@ -22,10 +21,10 @@ template <class EventClass> class DiJetPairSelection : public BaseOperator<Event
 
     virtual bool process( EventClass & ev ) {
 
-    std::vector<int> jet_is(ev.jets_.size());
+    std::vector<std::size_t> jet_is(ev.jets_.size());
     std::iota(jet_is.begin(), jet_is.end(), 0);
 
-    std::vector<int> min_is(jet_is.begin(), jet_is.end());
+    std::vector<std::size_t> min_is(jet_is.begin(), jet_is.end());
     double min_v = 100000 ;
 
     // iterate over all jet combinations for the non fixed jet 
@@ -54,9 +53,21 @@ template <class EventClass> class DiJetPairSelection : public BaseOperator<Event
       return false;
 		});
 
-      // the fist pair of elements of the min_is variale are
+      // the fist pair of elements of the min_is variable are
       // the indexes of the fist pair and the folowign two
       // are indexes for the second pair 
+
+      // use same order for jet collection (copy overhead as it is now)
+      auto ordered_jets = std::vector<mut::Jet>{}; 
+      for (std::size_t i = 0; i < ev.jets_.size(); i++ ) {
+        ordered_jets.emplace_back(ev.jets_.at(min_is.at(i)));
+      }
+      for (std::size_t i = 0; i < ev.jets_.size(); i++ ) {
+        ev.jets_.at(i) = ordered_jets.at(i);
+      }  
+        
+
+      // fill dijet objects
       ev.dijets_.emplace_back(ev.jets_.at(0) + ev.jets_.at(1));
       ev.dijets_.emplace_back(ev.jets_.at(2) + ev.jets_.at(3));
 
@@ -64,3 +75,6 @@ template <class EventClass> class DiJetPairSelection : public BaseOperator<Event
     }
 
 };
+
+
+
