@@ -19,6 +19,12 @@ template <class EventClass> class DiHiggsPlotter : public BaseOperator<EventClas
     DiHiggsPlotter()  {}
     virtual ~DiHiggsPlotter() {}
 
+    virtual void init(TDirectory * tdir) {
+      h_H0_mass.SetDirectory(tdir);
+      h_H1_mass.SetDirectory(tdir);
+      h_H0_H1_mass.SetDirectory(tdir);
+    }
+
     virtual bool process( EventClass & ev ) {
 
       h_H0_mass.Fill(ev.dijets_.at(0).mass());

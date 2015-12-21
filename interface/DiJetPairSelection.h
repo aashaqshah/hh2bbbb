@@ -74,6 +74,12 @@ template <class EventClass> class DiJetPairSelection : public BaseOperator<Event
       return true;
     }
 
+    virtual std::string get_name() {
+      auto name = std::string{"dijets_pair_selection_min_mass_diff_order_mass_"};
+      name += std::to_string(3) + "first_jets_fixed";
+      return name;
+    }
+
 };
 
 

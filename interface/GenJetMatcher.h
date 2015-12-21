@@ -83,5 +83,9 @@ template <class EventClass> class HHJetsMatched : public BaseOperator<EventClass
       return higgs_jet_is.empty();
     }
 
+    virtual std::string get_name() {
+     return std::string{"both_dijets_matched"};
+    }
+
 };
 

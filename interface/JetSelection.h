@@ -34,4 +34,12 @@ template <class EventClass> class JetSelection : public BaseOperator<EventClass>
       return true;
     }
 
+    virtual std::string get_name() {
+      auto name = std::string{};
+      name+= "jet_selection_min_"+std::to_string(min_number_);
+      name+= "jets_pt>"+std::to_string(pt_min_);
+      name+= "_|eta|<"+std::to_string(abs_eta_max_);
+      return name;
+    }
+
 };

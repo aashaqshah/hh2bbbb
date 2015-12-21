@@ -93,6 +93,13 @@ template <class EventClass> void BaseSelector<EventClass>::SlaveBegin(TTree * /*
 
    std::string option = GetOption();
 
+   auto root_dir = dynamic_cast<TDirectory *>(&(*tfile_));
+   auto curr_dir = root_dir;
+   for (auto & op : ops_) {
+     auto name = op->get_name();
+     if (name != "") curr_dir = curr_dir->mkdir(name.c_str());
+     op->init(curr_dir);
+   }
 }
 
 

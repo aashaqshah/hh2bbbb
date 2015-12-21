@@ -20,4 +20,11 @@ template <class EventClass> class TriggerFilter : public BaseOperator<EventClass
       return false;
     }
 
+    virtual std::string get_name() {
+      auto name = std::string{};
+      name+= "trigger";
+      for (const auto & or_path : or_paths_) name+="_OR"+or_path; 
+      return name;
+    }
+
 };

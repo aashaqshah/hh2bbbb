@@ -42,7 +42,7 @@ if isHH:
     selector.addOperator(GenJetMatcher(Event)())
     selector.addOperator(HHJetsMatched(Event)())
     selector.addOperator(EventCounter(Event)())
-    #selector.addOperator(DiHiggsPlotter(Event)())
+    selector.addOperator(DiHiggsPlotter(Event)())
 file_n = "/lustre/cmswork/dallosso/hh2bbbb/non-resonant/analysis/13TeV/hh4bNores/data/Step0/tree_Step0_V13_SM.root" 
 
 tchain = TChain("tree")
