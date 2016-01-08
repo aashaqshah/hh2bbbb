@@ -4,6 +4,7 @@
 #include <algorithm>
 
 #include "BaseOperator.h"
+#include "mut_framework/mut_dataformats/interface/Jet.h"
 
 template <class EventClass> class JetSelection : public BaseOperator<EventClass> {
 

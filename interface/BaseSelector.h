@@ -1,4 +1,6 @@
 
+#pragma once
+
 #ifndef BaseSelector_h
 #define BaseSelector_h
 
@@ -43,7 +45,10 @@ template <class EventClass> class BaseSelector : public TSelector {
   virtual ~BaseSelector() {}
 
   virtual bool addOperator( BaseOperator<EventClass> * op ) { 
+    std::cout << " adding operator " ;
+    std::cout << op->get_name();
     ops_.emplace_back(op);
+    std::cout << " worked " << std::endl;
     return true;
   }
 
@@ -92,7 +97,7 @@ template <class EventClass> void BaseSelector<EventClass>::SlaveBegin(TTree * /*
 {
 
    std::string option = GetOption();
-
+  
    auto root_dir = dynamic_cast<TDirectory *>(&(*tfile_));
    auto curr_dir = root_dir;
    for (auto & op : ops_) {

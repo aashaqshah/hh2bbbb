@@ -4,6 +4,7 @@
 #include <algorithm>
 
 #include "BaseOperator.h"
+#include "mut_framework/mut_dataformats/interface/Jet.h"
 
 template <class EventClass> class BTagJetSelection : public BaseOperator<EventClass> {
 
@@ -37,7 +38,7 @@ template <class EventClass> class BTagJetSelection : public BaseOperator<EventCl
 
     virtual std::string get_name() {
       auto name = std::string{"sort_jets_in"+disc_};
-      name =+ "and_min_"+std::to_string(min_number_)+">" + std::to_string(d_value_); 
+      name += "and_min_"+std::to_string(min_number_)+">" + std::to_string(d_value_); 
       return name;
     } 
 

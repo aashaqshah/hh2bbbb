@@ -1,20 +1,5 @@
 <lcgdict>
-  <class name="Event"/>
-  <class name="BaseSelector<Event>"/>
-  <class name="ExampleOperator<Event>"/>
-  <class name="TriggerFilter<Event>"/>
-  <class name="EventCounter<Event>"/>
-  <class name="JetSelection<Event>"/>
-  <class name="BTagJetSelection<Event>"/>
   <class name="ExtEvent"/>    
   <class name="BaseSelector<ExtEvent>"/>
-  <class name="ExampleOperator<ExtEvent>"/>
-  <class name="TriggerFilter<ExtEvent>"/>
-  <class name="EventCounter<ExtEvent>"/>
-  <class name="JetSelection<ExtEvent>"/>
-  <class name="BTagJetSelection<ExtEvent>"/>
-  <class name="DiJetPairSelection<ExtEvent>"/>
-  <class name="DiHiggsPlotter<ExtEvent>"/>
-  <class name="GenJetMatcher<ExtEvent>"/>
-  <class name="HHJetsMatched<ExtEvent>"/>
+  <class name="BasicSelector<ExtEvent>"/>
 </lcgdict>  
