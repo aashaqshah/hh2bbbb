@@ -8,6 +8,8 @@ from ROOT import TH1
 from di_higgs.hh2bbbb.samples_25ns import mc_samples
 
 max_events = -100000
+inEllipse = False 
+freeJetTagged = True 
 isMC = True
 
 TH1.AddDirectory(False)
@@ -33,11 +35,14 @@ hlt_paths_or_v = vector("string")()
 for hlt_path in hlt_paths_or: hlt_paths_or_v.push_back(hlt_path)
 
 mc_names = mc_samples.keys()
-mc_names = ["HHTo4B_SM"]
+#mc_names = ["HHTo4B_SM"]
+mc_names = ["QCD_HT700to1000"]
 for name in mc_names:
     isHH = False
     if "HH" in name: isHH = True
-    selector = BasicSelector(Event)(0, hlt_paths_v, isHH, hlt_paths_or_v)
+    selector = BasicSelector(Event)(0, hlt_paths_v, isHH,
+                                    hlt_paths_or_v, inEllipse,
+                                    freeJetTagged)
     tchain = TChain("tree")
     tchain.Add(mc_samples[name]["lustre_path"])
     print "processing {} sample".format(name)
