@@ -45,6 +45,8 @@ class ExtEvent : public Event {
 
   CandidateCollection dijets_; 
   std::vector<std::set<std::size_t>> reco_jet_matchs_; 
+  // indexes of jet chosen by min mass diff 
+  std::vector<std::size_t> free_is_;
 
   // inherit constructors
   using Event::Event;
@@ -54,6 +56,7 @@ class ExtEvent : public Event {
     Event::update();
     dijets_.clear();
     reco_jet_matchs_.clear();
+    free_is_.clear();
   }
 
 };

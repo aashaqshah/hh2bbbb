@@ -12,6 +12,8 @@
 #include "DiJetPairSelection.h"
 #include "GenJetMatcher.h"
 #include "DiHiggsPlotter.h"
+#include "FreeJetPlotter.h"
+#include "NotOperator.h"
 
 
 
@@ -34,11 +36,17 @@ template <class EventClass> class BasicSelector : public BaseSelector<EventClass
       this->addOperator(new BetterDiJetPairSelection<EventClass>("CSV", 0.890, n_CSV));
       this->addOperator(new EventCounter<EventClass>());
       this->addOperator(new DiHiggsPlotter<EventClass>());
+      this->addOperator(new FreeJetPlotter<EventClass>("CSV"));
+      this->addOperator(new NotOperator<WithinEllipse<EventClass>,EventClass>());
+      this->addOperator(new EventCounter<EventClass>());
+      this->addOperator(new DiHiggsPlotter<EventClass>());
+      this->addOperator(new FreeJetPlotter<EventClass>("CSV"));
       if (isHH) {
         this->addOperator(new GenJetMatcher<EventClass>());
         this->addOperator(new HHJetsMatched<EventClass>());
         this->addOperator(new EventCounter<EventClass>());
         this->addOperator(new DiHiggsPlotter<EventClass>());
+        this->addOperator(new FreeJetPlotter<EventClass>("CSV"));
       }
 
 
