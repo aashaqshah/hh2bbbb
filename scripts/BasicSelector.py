@@ -5,8 +5,10 @@ from ROOT import ExtEvent as Event
 from ROOT import TChain, BasicSelector,  vector
 from ROOT import TH1
 
+from di_higgs.hh2bbbb.samples_25ns import mc_samples
+
+max_events = 100000
 isMC = True
-isHH = True 
 
 TH1.AddDirectory(False)
 
@@ -29,11 +31,17 @@ for hlt_path in hlt_paths: hlt_paths_v.push_back(hlt_path)
 hlt_paths_or = hlt_paths[0:1] +  hlt_paths[2:3] 
 hlt_paths_or_v = vector("string")()
 for hlt_path in hlt_paths_or: hlt_paths_or_v.push_back(hlt_path)
-selector = BasicSelector(Event)(0, hlt_paths_v, isHH, hlt_paths_or_v)
-file_n = "/lustre/cmswork/dallosso/hh2bbbb/non-resonant/analysis/13TeV/hh4bNores/data/Step0/tree_Step0_V13_SM.root" 
 
-print 'process start'
-tchain = TChain("tree")
-tchain.Add(file_n)
-tchain.Process(selector, "" )
+mc_names = mc_samples.keys()
+for name in mc_names:
+    isHH = False
+    if "HH" in name: isHH = True
+    selector = BasicSelector(Event)(0, hlt_paths_v, isHH, hlt_paths_or_v)
+    tchain = TChain("tree")
+    tchain.Add(mc_samples[name]["lustre_path"])
+    print "processing {} sample".format(name)
+    if max_events > 0:
+        tchain.Process(selector, "ofile="+name+".root", max_events)
+    else:
+        tchain.Process(selector, "ofile="+name+".root")
 

@@ -34,11 +34,8 @@ template <class EventClass> class DiHiggsPlotter : public BaseOperator<EventClas
       return true;
     }
 
-    virtual bool output( std::unique_ptr<TFile> tfile) {
+    virtual bool output( TFile * tfile) {
 
-      h_H0_mass.Write();
-      h_H1_mass.Write();
-      h_H0_H1_mass.Write();
       return true;
 
     }

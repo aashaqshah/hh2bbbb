@@ -28,7 +28,7 @@ template <class EventClass> class BaseSelector : public TSelector {
   // associated with a TTree
   TTreeReader reader_;
   // to save output 
-  std::unique_ptr<TFile> tfile_{new TFile("output.root", "RECREATE")}; 
+  TFile * tfile_{ nullptr}; 
 
   // event class 
   EventClass ev_; 
@@ -45,10 +45,7 @@ template <class EventClass> class BaseSelector : public TSelector {
   virtual ~BaseSelector() {}
 
   virtual bool addOperator( BaseOperator<EventClass> * op ) { 
-    std::cout << " adding operator " ;
-    std::cout << op->get_name();
     ops_.emplace_back(op);
-    std::cout << " worked " << std::endl;
     return true;
   }
 
@@ -90,6 +87,7 @@ template <class EventClass> void BaseSelector<EventClass>::Begin(TTree * /*tree*
 
    std::string option = GetOption();
 
+
 }
 
 // right after begin (executed on slave)
@@ -97,7 +95,16 @@ template <class EventClass> void BaseSelector<EventClass>::SlaveBegin(TTree * /*
 {
 
    std::string option = GetOption();
-  
+ 
+   std::string o_filename = "output.root";
+   std::size_t i_ofile = option.find("ofile="); 
+   if (i_ofile != std::string::npos) {
+     std::size_t length = (option.find(";", i_ofile) -  option.find("=", i_ofile) - 1);
+     o_filename = option.substr(option.find("=", i_ofile)+1 , length );
+   } 
+   tfile_ = new TFile(o_filename.c_str(), "RECREATE");
+   
+ 
    auto root_dir = dynamic_cast<TDirectory *>(&(*tfile_));
    auto curr_dir = root_dir;
    for (auto & op : ops_) {
@@ -113,7 +120,7 @@ template <class EventClass> bool  BaseSelector<EventClass>::Process(Long64_t ent
 {
 
   n_entries++;
-  if ((n_entries%10000) == 0) std::cout << "processing " << n_entries << " entry" << std::endl; 
+  if ((n_entries%100000) == 0) std::cout << "processing " << n_entries << " entry" << std::endl; 
 
   // set TTreeReader entry
   reader_.SetLocalEntry(entry);

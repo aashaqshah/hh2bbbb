@@ -1,7 +1,7 @@
 
-#include "di-higgs/hh2bbbb/interface/BaseSelector.h"
-#include "di-higgs/hh2bbbb/interface/BasicSelector.h"
-#include "di-higgs/hh2bbbb/interface/Event.h"
+#include "di_higgs/hh2bbbb/interface/BaseSelector.h"
+#include "di_higgs/hh2bbbb/interface/BasicSelector.h"
+#include "di_higgs/hh2bbbb/interface/Event.h"
 
 
 namespace {
