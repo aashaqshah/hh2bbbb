@@ -16,6 +16,7 @@
 #include "NotOperator.h"
 #include "FreeJetTagPdf.h"
 #include "FreeJetTagged.h"
+#include "FreeJetWeight.h"
 
 
 template <class EventClass> class BasicSelector : public BaseSelector<EventClass> {
@@ -23,7 +24,8 @@ template <class EventClass> class BasicSelector : public BaseSelector<EventClass
   public:
 
   BasicSelector(TTree * /*tree*/ =0, std::vector<std::string> hlt_bits = {}, bool isHH = false,
-      std::vector<std::string> hlt_bits_or = {}, bool inEllipse = true, bool freeJetTagged = true) :
+      std::vector<std::string> hlt_bits_or = {}, bool inEllipse = true, bool freeJetTagged = true,
+      TH2D * ratio = nullptr) :
     BaseSelector<EventClass>(0,hlt_bits, isHH)
     {
       std::size_t n_CSV = 3;
@@ -47,6 +49,9 @@ template <class EventClass> class BasicSelector : public BaseSelector<EventClass
       this->addOperator(new DiHiggsPlotter<EventClass>());
       this->addOperator(new FreeJetPlotter<EventClass>("CSV"));
       this->addOperator(new FreeJetTagPdf<EventClass>("CSV",0.605));
+      if ( ratio != nullptr) {
+        this->addOperator(new FreeJetWeight2D<EventClass>("free_jet_weight", ratio));
+      }
       if (freeJetTagged) {
         this->addOperator(new FreeJetTagged<EventClass>("CSV",0.605));
       } else {
