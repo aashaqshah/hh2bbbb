@@ -23,6 +23,7 @@ template <class EventClass> class BasicSelector : public BaseSelector<EventClass
 
   public:
 
+
   BasicSelector(TTree * /*tree*/ =0, std::vector<std::string> hlt_bits = {}, bool isHH = false,
       std::vector<std::string> hlt_bits_or = {}, bool inEllipse = true, bool freeJetTagged = true,
       TH2D * ratio = nullptr) :
@@ -49,16 +50,17 @@ template <class EventClass> class BasicSelector : public BaseSelector<EventClass
       this->addOperator(new DiHiggsPlotter<EventClass>());
       this->addOperator(new FreeJetPlotter<EventClass>("CSV"));
       this->addOperator(new FreeJetTagPdf<EventClass>("CSV",0.605));
-      if ( ratio != nullptr) {
-        this->addOperator(new FreeJetWeight2D<EventClass>("free_jet_weight", ratio));
-      }
       if (freeJetTagged) {
         this->addOperator(new FreeJetTagged<EventClass>("CSV",0.605));
+        this->addOperator(new DiHiggsPlotter<EventClass>({}, true));
       } else {
         this->addOperator(new NotOperator<FreeJetTagged<EventClass>, EventClass>("CSV",0.605));
+        this->addOperator(new DiHiggsPlotter<EventClass>({}, true));
+        if ( ratio != nullptr) {
+          this->addOperator(new FreeJetWeight2D<EventClass>("free_jet_weight", ratio));
+          this->addOperator(new DiHiggsPlotter<EventClass>( {"free_jet_weight"}, true, "weighted"));
+        }
       }
-      this->addOperator(new EventCounter<EventClass>());
-      this->addOperator(new DiHiggsPlotter<EventClass>());
       if (isHH) {
         this->addOperator(new GenJetMatcher<EventClass>());
         this->addOperator(new HHJetsMatched<EventClass>());

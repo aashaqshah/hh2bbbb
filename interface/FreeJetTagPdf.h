@@ -14,6 +14,7 @@ template <class EventClass> class FreeJetTagPdf : public BaseOperator<EventClass
 
     std::string disc_;
     double d_value_;
+    bool root_;
 
     std::vector<double> pt_bins {20., 50., 80., 120., 180., 300., 500. };
     std::vector<double> abs_eta_bins {0., 0.5, 1., 1.5, 2.5 };
@@ -31,10 +32,14 @@ template <class EventClass> class FreeJetTagPdf : public BaseOperator<EventClass
                                        int(pt_bins.size()-1), pt_bins.data(),
                                        int(abs_eta_bins.size()-1), abs_eta_bins.data()};
 
-    FreeJetTagPdf( std::string disc, double d_value) : disc_(disc), d_value_(d_value)  {}
+    FreeJetTagPdf( std::string disc, double d_value, bool root = true) : 
+      disc_(disc), 
+      d_value_(d_value),
+      root_(root)  {}
     virtual ~FreeJetTagPdf() {}
 
     virtual void init(TDirectory * tdir) {
+      if (root_) tdir = tdir->GetFile();
       h_free_jet_tag_number.SetDirectory(tdir);
       h_free_jet_tag_pt.SetDirectory(tdir);
       h_free_jet_tag_abs_eta.SetDirectory(tdir);
@@ -43,6 +48,14 @@ template <class EventClass> class FreeJetTagPdf : public BaseOperator<EventClass
       h_free_jet_untag_pt.SetDirectory(tdir);
       h_free_jet_untag_abs_eta.SetDirectory(tdir);
       h_free_jet_untag_pt_abs_eta.SetDirectory(tdir);
+      h_free_jet_tag_number.Sumw2();
+      h_free_jet_tag_pt.Sumw2();
+      h_free_jet_tag_abs_eta.Sumw2();
+      h_free_jet_tag_pt_abs_eta.Sumw2();
+      h_free_jet_untag_number.Sumw2();
+      h_free_jet_untag_pt.Sumw2();
+      h_free_jet_untag_abs_eta.Sumw2();
+      h_free_jet_untag_pt_abs_eta.Sumw2();
     }
 
     virtual bool process( EventClass & ev ) {
@@ -59,6 +72,7 @@ template <class EventClass> class FreeJetTagPdf : public BaseOperator<EventClass
         } else {
           n_untag++;
           h_free_jet_untag_pt.Fill(jet.pt());
+          h_free_jet_untag_abs_eta.Fill(std::abs(jet.eta()));
           h_free_jet_untag_pt_abs_eta.Fill(jet.pt(), std::abs(jet.eta()));
         }
        }

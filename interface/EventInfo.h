@@ -53,6 +53,7 @@ class EventInfo : public mut::EventInfo {
                                   (double) **hlt_bit_pair.second >  0.5);
       } 
       this->setFilterPairs(filterPairs);
+      this->weightPairs_.clear();
 
     }
 };

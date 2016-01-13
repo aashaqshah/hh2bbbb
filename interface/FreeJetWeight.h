@@ -30,8 +30,16 @@ template <class EventClass> class FreeJetWeight2D : public BaseOperator<EventCla
 
         const auto & jet = ev.jets_.at(ev.free_is_.at(0));;
         auto g_bin = filler_->Fill(jet.pt(), std::abs(jet.eta()));
-        ev.eventInfo_.emplaceWeight(w_name_, ratio_->GetBinContent(g_bin));
+        auto weight = ratio_->GetBinContent(g_bin);
+        auto weight_unc = ratio_->GetBinError(g_bin);
+
+        ev.eventInfo_.emplaceWeight(w_name_, float(weight));
+        ev.eventInfo_.emplaceWeight(w_name_+"_unc", float(weight));
 
       return true;
+    }
+
+    virtual std::string get_name() {
+      return w_name_;
     }
 };
