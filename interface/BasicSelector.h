@@ -53,13 +53,16 @@ template <class EventClass> class BasicSelector : public BaseSelector<EventClass
       if (freeJetTagged) {
         this->addOperator(new FreeJetTagged<EventClass>("CSV",0.605));
         this->addOperator(new DiHiggsPlotter<EventClass>({}, true));
+        this->addOperator(new FreeJetPlotter<EventClass>("CSV", {}, true));
       } else {
         this->addOperator(new NotOperator<FreeJetTagged<EventClass>, EventClass>("CSV",0.605));
         this->addOperator(new DiHiggsPlotter<EventClass>({}, true));
+        this->addOperator(new FreeJetPlotter<EventClass>("CSV", {}, true));
         if ( ratio != nullptr) {
           this->addOperator(new FreeJetWeight2D<EventClass>("free_jet_weight", ratio));
           this->addOperator(new DiHiggsPlotter<EventClass>( {"free_jet_weight"}, true, "weighted"));
-        }
+          this->addOperator(new FreeJetPlotter<EventClass>("CSV", {"free_jet_weight"}, true, "weighted"));
+        } 
       }
       if (isHH) {
         this->addOperator(new GenJetMatcher<EventClass>());
@@ -67,7 +70,6 @@ template <class EventClass> class BasicSelector : public BaseSelector<EventClass
         this->addOperator(new EventCounter<EventClass>());
         this->addOperator(new DiHiggsPlotter<EventClass>());
         this->addOperator(new FreeJetPlotter<EventClass>("CSV"));
-        this->addOperator(new FreeJetTagPdf<EventClass>("CSV",0.605));
       }
 
 

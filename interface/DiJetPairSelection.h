@@ -77,6 +77,9 @@ template <class EventClass> class DiJetPairSelection : public BaseOperator<Event
       ev.dijets_.emplace_back(ev.jets_.at(0) + ev.jets_.at(1));
       ev.dijets_.emplace_back(ev.jets_.at(2) + ev.jets_.at(3));
 
+      ev.free_is_.clear();
+      ev.free_is_.emplace_back(3);
+
       return true;
     }
 

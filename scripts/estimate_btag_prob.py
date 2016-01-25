@@ -37,6 +37,7 @@ hlt_paths_or_v = vector("string")()
 for hlt_path in hlt_paths_or: hlt_paths_or_v.push_back(hlt_path)
 
 mc_names = mc_samples.keys()
+mc_names = []
 for name in mc_names:
     isHH = False
     if "HH" in name: isHH = True
@@ -51,3 +52,37 @@ for name in mc_names:
     else:
         tchain.Process(selector, "ofile="+base_dir+name+".root")
 
+process_data = True
+if (process_data):
+    data_dir = "/lustre/cmswork/dallosso/hh2bbbb/non-resonant/analysis/13TeV/hh4bNores/data/Step0/" 
+    data_name = "tree_Step0_V15_BTagCSVRun2015TopUp"
+    isHH = False
+    isMC = False
+#    freeJetTagged = True 
+#    hlt_paths = hlt_paths_mc if isMC else hlt_paths_data
+#    hlt_paths_v = vector("string")()
+#    for hlt_path in hlt_paths: hlt_paths_v.push_back(hlt_path)
+#    
+#    hlt_paths_or = hlt_paths[0:1] +  hlt_paths[2:3] 
+#    hlt_paths_or_v = vector("string")()
+#    for hlt_path in hlt_paths_or: hlt_paths_or_v.push_back(hlt_path)
+#    selector = BasicSelector(Event)(0, hlt_paths_v, isHH,
+#                                    hlt_paths_or_v, inEllipse,
+#                                    freeJetTagged)
+#    tchain = TChain("tree")
+#    tchain.Add(data_dir+data_name+".root")
+#    tchain.Process(selector, "ofile="+base_dir+data_name+"_tag.root")
+    freeJetTagged = False 
+    hlt_paths = hlt_paths_mc if isMC else hlt_paths_data
+    hlt_paths_v = vector("string")()
+    for hlt_path in hlt_paths: hlt_paths_v.push_back(hlt_path)
+    
+    hlt_paths_or = hlt_paths[0:1] +  hlt_paths[2:3] 
+    hlt_paths_or_v = vector("string")()
+    for hlt_path in hlt_paths_or: hlt_paths_or_v.push_back(hlt_path)
+    selector = BasicSelector(Event)(0, hlt_paths_v, isHH,
+                                    hlt_paths_or_v, inEllipse,
+                                    freeJetTagged)
+    tchain = TChain("tree")
+    tchain.Add(data_dir+data_name+".root")
+    tchain.Process(selector, "ofile="+base_dir+data_name+"_untag.root")

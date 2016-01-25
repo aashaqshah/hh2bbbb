@@ -2,4 +2,5 @@
   <class name="ExtEvent"/>    
   <class name="BaseSelector<ExtEvent>"/>
   <class name="BasicSelector<ExtEvent>"/>
+  <class name="PairingSelector<ExtEvent>"/>
 </lcgdict>  
