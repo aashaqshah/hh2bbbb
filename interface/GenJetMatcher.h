@@ -44,6 +44,36 @@ template <class EventClass> class GenJetMatcher : public BaseOperator<EventClass
 
 };
 
+template <class EventClass> class AllGenBMatched : public BaseOperator<EventClass> {
+
+  public:
+
+    AllGenBMatched( ) {}
+
+    virtual ~AllGenBMatched() {}
+
+    virtual bool process( EventClass & ev) {
+
+      const auto & matchs = ev.reco_jet_matchs_;
+
+      std::set<std::size_t> gen_b_is_set{0,1,2,3}; 
+
+
+      for (const auto & match : matchs) {
+        if (match.size() == 1) {
+          gen_b_is_set.erase(*match.begin());
+        }
+      }
+
+      return gen_b_is_set.empty();
+    }
+
+    virtual std::string get_name() {
+     return std::string{"all_gen_b_matched"};
+    }
+
+};
+
 template <class EventClass> class HHJetsMatched : public BaseOperator<EventClass> {
 
   public:
