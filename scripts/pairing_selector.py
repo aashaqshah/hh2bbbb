@@ -36,7 +36,7 @@ hlt_paths_or_v = vector("string")()
 for hlt_path in hlt_paths_or: hlt_paths_or_v.push_back(hlt_path)
 
 name = "HHTo4B_SM"
-for pairing in [0,1,2]:
+for pairing in [0,1]:
     isHH = False
     if "HH" in name: isHH = True
     selector = PairingSelector(Event)(0, hlt_paths_v, isHH,

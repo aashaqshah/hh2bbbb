@@ -2,6 +2,7 @@
 <use name="root"/>
 <use name="rootcore"/>
 <use name="rootgraphics"/>
+<use name="roottmva"/>
 <use name="mut_framework/mut_dataformats"/>
 <flags CXXFLAGS="-lGenVector"/>
 <Flags ROOTMAP="no"/>

@@ -7,7 +7,7 @@ from ROOT import TH1
 
 from di_higgs.hh2bbbb.samples_25ns import mc_samples
 
-max_events = 100
+max_events = -1 
 inEllipse = False 
 freeJetTagged = True 
 isMC = True

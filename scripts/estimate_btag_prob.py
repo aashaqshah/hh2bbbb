@@ -37,7 +37,7 @@ hlt_paths_or_v = vector("string")()
 for hlt_path in hlt_paths_or: hlt_paths_or_v.push_back(hlt_path)
 
 mc_names = mc_samples.keys()
-mc_names = []
+#mc_names = []
 for name in mc_names:
     isHH = False
     if "HH" in name: isHH = True
@@ -52,7 +52,7 @@ for name in mc_names:
     else:
         tchain.Process(selector, "ofile="+base_dir+name+".root")
 
-process_data = True
+process_data = False 
 if (process_data):
     data_dir = "/lustre/cmswork/dallosso/hh2bbbb/non-resonant/analysis/13TeV/hh4bNores/data/Step0/" 
     data_name = "tree_Step0_V15_BTagCSVRun2015TopUp"

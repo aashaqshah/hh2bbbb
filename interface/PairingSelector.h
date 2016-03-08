@@ -10,6 +10,7 @@
 #include "JetSelection.h"
 #include "BTagJetSelection.h"
 #include "DiJetPairSelection.h"
+#include "MVAPairSelection.h"
 #include "GenJetMatcher.h"
 #include "DiHiggsPlotter.h"
 #include "FreeJetPlotter.h"
@@ -28,7 +29,7 @@ template <class EventClass> class PairingSelector : public BaseSelector<EventCla
       std::vector<std::string> hlt_bits_or = {}, std::size_t pair_method = 2) :
     BaseSelector<EventClass>(0,hlt_bits, isHH)
     {
-      std::size_t n_CSV = 3;
+      std::size_t n_CSV = 0;
       this->addOperator(new EventCounter<EventClass>());
       this->addOperator(new TriggerFilter<EventClass>(hlt_bits_or));
       this->addOperator(new EventCounter<EventClass>());
@@ -40,6 +41,13 @@ template <class EventClass> class PairingSelector : public BaseSelector<EventCla
         this->addOperator(new DiJetPairSelection<EventClass>(4));
       } else if (pair_method == 1) {
         this->addOperator(new DiJetPairSelection<EventClass>(3));
+      } else if (pair_method == 2) {
+        std::string base_path = "/lustre/cmswork/hh/combinatorics/dataset_06022016/no_spectators/";
+        std::vector<std::string> mva_xmls;
+        for (std::size_t i=4; i<9; i++) 
+          mva_xmls.emplace_back(base_path + std::to_string(i) +
+          "jets_5var_block_massDiffTMVAClassification_kFisher.weights.xml");
+        this->addOperator(new MVAPairSelection<EventClass>(mva_xmls));
       } else { 
         this->addOperator(new BetterDiJetPairSelection<EventClass>("CSV", 0.890, n_CSV));
       }

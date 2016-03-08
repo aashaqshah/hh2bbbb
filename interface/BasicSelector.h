@@ -37,7 +37,7 @@ template <class EventClass> class BasicSelector : public BaseSelector<EventClass
       this->addOperator(new EventCounter<EventClass>());
       this->addOperator(new BTagJetSelection<EventClass>("CSV", 0.890, n_CSV));
       this->addOperator(new EventCounter<EventClass>());
-      this->addOperator(new BetterDiJetPairSelection<EventClass>("CSV", 0.890, n_CSV));
+      this->addOperator(new DiJetPairSelection<EventClass>(4));
       this->addOperator(new EventCounter<EventClass>());
       this->addOperator(new DiHiggsPlotter<EventClass>());
       this->addOperator(new FreeJetPlotter<EventClass>("CSV"));

@@ -37,7 +37,7 @@ hlt_paths_or_v = vector("string")()
 for hlt_path in hlt_paths_or: hlt_paths_or_v.push_back(hlt_path)
 
 mc_names = mc_samples.keys()
-mc_names = ["HHTo4B_SM"]
+mc_names=[mc_name for mc_name in mc_names if 'HH' in mc_name]
 for name in mc_names:
     isHH = False
     if "HH" in name: isHH = True
@@ -45,8 +45,8 @@ for name in mc_names:
                                     hlt_paths_or_v, inEllipse,
                                     freeJetTagged)
     tchain = TChain("tree")
-    tchain.Add(mc_samples[name]["lustre_path"])
-    print "processing {} sample".format(name)
+    n_added = tchain.Add(mc_samples[name]["lustre_path"])
+    print "processing {} sample ( {} files)".format(name, n_added)
     if max_events > 0:
         tchain.Process(selector, "ofile="+base_dir+name+".root", max_events)
     else:

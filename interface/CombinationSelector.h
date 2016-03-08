@@ -32,7 +32,7 @@ template <class EventClass> class CombinationSelector : public BaseSelector<Even
       this->addOperator(new GenJetMatcher<EventClass>());
       this->addOperator(new AllGenBMatched<EventClass>());
       this->addOperator(new EventCounter<EventClass>());
-      this->addOperator(new CombinationWriter<EventClass>());
+      this->addOperator(new CombinationWriter<EventClass>(true));
       this->addOperator(new EventCounter<EventClass>());
 
 
