@@ -17,6 +17,6 @@ scram b -j 8
 ## run example analysis
 
 ```
-cd scripts/
+cd di_higgs/hh2bbbb/scripts/
 python signal_region.py
 ```
