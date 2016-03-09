@@ -3,6 +3,7 @@
 #include "di_higgs/hh2bbbb/interface/BasicSelector.h"
 #include "di_higgs/hh2bbbb/interface/PairingSelector.h"
 #include "di_higgs/hh2bbbb/interface/CombinationSelector.h"
+#include "di_higgs/hh2bbbb/interface/MixingSelector.h"
 #include "di_higgs/hh2bbbb/interface/Event.h"
 
 
@@ -13,5 +14,6 @@ namespace {
     BasicSelector<ExtEvent> dummy2;
     PairingSelector<ExtEvent> dummy3;
     CombinationSelector<ExtEvent> dummy4;
+    MixingSelector<ExtEvent> dummy5;
   };
 }
