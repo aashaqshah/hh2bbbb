@@ -18,6 +18,7 @@
 #include "FreeJetTagPdf.h"
 #include "FreeJetTagged.h"
 #include "FreeJetWeight.h"
+#include "JetPlotter.h"
 
 
 template <class EventClass> class PairingSelector : public BaseSelector<EventClass> {
@@ -36,6 +37,7 @@ template <class EventClass> class PairingSelector : public BaseSelector<EventCla
       this->addOperator(new JetSelection<EventClass>(2.5, 20., 4));
       this->addOperator(new EventCounter<EventClass>());
       this->addOperator(new BTagJetSelection<EventClass>("CSV", 0.890, n_CSV));
+      this->addOperator(new JetPlotter<EventClass>({}, true));
       this->addOperator(new EventCounter<EventClass>());
       if (pair_method == 0) {
         this->addOperator(new DiJetPairSelection<EventClass>(4));

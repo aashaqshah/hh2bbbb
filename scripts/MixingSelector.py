@@ -35,7 +35,6 @@ hlt_paths_or_v = vector("string")()
 for hlt_path in hlt_paths_or: hlt_paths_or_v.push_back(hlt_path)
 
 mc_names = mc_samples.keys()
-mc_names = ["QCD_HT700to1000"]
 for name in mc_names:
     isHH = False
     if "HH" in name: isHH = True
@@ -45,7 +44,7 @@ for name in mc_names:
     tchain.Add(mc_samples[name]["lustre_path"])
     print "processing {} sample".format(name)
     if max_events > 0:
-        tchain.Process(selector, "ofile="+name+".root", max_events)
+        tchain.Process(selector, "ofile="+"./mixing/"+name+".root", max_events)
     else:
-        tchain.Process(selector, "ofile="+name+".root")
+        tchain.Process(selector, "ofile="+"./mixing/"+name+".root")
 

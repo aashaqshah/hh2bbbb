@@ -12,6 +12,8 @@ inEllipse = False
 freeJetTagged = True 
 isMC = True
 
+results_dir = "./pairing/"
+
 TH1.AddDirectory(False)
 
 hlt_paths_data = ["HLT_BIT_HLT_QuadJet45_TripleBTagCSV0p67_v",
@@ -45,7 +47,7 @@ for name in mc_names:
     tchain.Add(mc_samples[name]["lustre_path"])
     print "processing {} sample".format(name)
     if max_events > 0:
-        tchain.Process(selector, "ofile="+name+".root", max_events)
+        tchain.Process(selector, "ofile="+results_dir+name+".root", max_events)
     else:
-        tchain.Process(selector, "ofile="+name+".root")
+        tchain.Process(selector, "ofile="+results_dir+name+".root")
 

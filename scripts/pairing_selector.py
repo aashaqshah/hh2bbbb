@@ -7,7 +7,8 @@ from ROOT import TH1, TFile
 
 from di_higgs.hh2bbbb.samples_25ns import mc_samples
 
-base_dir = "pairing_selector/"
+#base_dir = "pairing/"
+base_dir = ""
 
 inEllipse = True 
 freeJetTagged = True 
@@ -35,14 +36,18 @@ hlt_paths_or = hlt_paths[0:1] +  hlt_paths[2:3]
 hlt_paths_or_v = vector("string")()
 for hlt_path in hlt_paths_or: hlt_paths_or_v.push_back(hlt_path)
 
-name = "HHTo4B_SM"
-for pairing in [0,1]:
-    isHH = False
-    if "HH" in name: isHH = True
-    selector = PairingSelector(Event)(0, hlt_paths_v, isHH,
-                                    hlt_paths_or_v, pairing)
-    tchain = TChain("tree")
-    tchain.Add(mc_samples[name]["lustre_path"])
-    print "processing {} sample".format(name)
-    tchain.Process(selector, "ofile="+base_dir+name+"_{}.root".format(pairing))
+mc_names = mc_samples.keys()
+mc_names = [name for name in mc_names if "HH" in name]
 
+#for pairing in [0,1,2]:
+for pairing in [0]:
+    for name in mc_names:
+        isHH = False
+        if "HH" in name: isHH = True
+        selector = PairingSelector(Event)(0, hlt_paths_v, isHH,
+                                        hlt_paths_or_v, pairing)
+        tchain = TChain("tree")
+        tchain.Add(mc_samples[name]["lustre_path"])
+        print "processing {} sample".format(name)
+        tchain.Process(selector, "ofile="+base_dir+name+"_{}.root".format(pairing))
+    
