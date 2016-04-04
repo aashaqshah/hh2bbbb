@@ -22,8 +22,8 @@ template <class EventClass> class MixingSelector : public BaseSelector<EventClas
     {
       std::size_t n_CSV = 2;
       this->addOperator(new EventCounter<EventClass>());
-//      this->addOperator(new TriggerFilter<EventClass>(hlt_bits_or));
-//      this->addOperator(new EventCounter<EventClass>());
+      this->addOperator(new TriggerFilter<EventClass>(hlt_bits_or));
+      this->addOperator(new EventCounter<EventClass>());
       this->addOperator(new JetSelection<EventClass>(2.5, 20., 4));
       this->addOperator(new EventCounter<EventClass>());
       this->addOperator(new BTagJetSelection<EventClass>("CSV", 0.890, n_CSV));
