@@ -16,19 +16,12 @@ isMC = True
 
 TH1.AddDirectory(False)
 
-hlt_paths_data = ["HLT_BIT_HLT_QuadJet45_TripleBTagCSV0p67_v",
+hlt_paths = ["HLT_BIT_HLT_QuadJet45_TripleBTagCSV0p67_v",
                   "HLT_BIT_HLT_QuadJet45_DoubleBTagCSV0p67_v",
                   "HLT_BIT_HLT_DoubleJet90_Double30_TripleBTagCSV0p67_v",
                   "HLT_BIT_HLT_DoubleJet90_Double30_DoubleBTagCSV0p67_v",
                   "HLT_HH4bAll"]
 
-hlt_paths_mc = ["HLT_BIT_HLT_QuadJet45_TripleCSV0p5_v",
-                "HLT_BIT_HLT_QuadJet45_DoubleCSV0p5_v",
-                "HLT_BIT_HLT_DoubleJet90_Double30_TripleCSV0p5_v",
-                "HLT_BIT_HLT_DoubleJet90_Double30_DoubleCSV0p5_v",
-                "HLT_HH4bAll"]
-
-hlt_paths = hlt_paths_mc if isMC else hlt_paths_data
 hlt_paths_v = vector("string")()
 for hlt_path in hlt_paths: hlt_paths_v.push_back(hlt_path)
 

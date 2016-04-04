@@ -18,7 +18,7 @@ class EventInfo : public mut::EventInfo {
     // For reading from VHBB_HEPPY
     TTreeReaderValue<unsigned int> * run_tr_;
     TTreeReaderValue<unsigned long long> * event_tr_;
-    std::vector<std::pair<std::string,std::unique_ptr<TTreeReaderValue<float>>>> hlt_bits_; 
+    std::vector<std::pair<std::string,std::unique_ptr<TTreeReaderValue<int>>>> hlt_bits_; 
 
     
     EventInfo() : 
@@ -32,8 +32,8 @@ class EventInfo : public mut::EventInfo {
 
       for (const auto & hlt_bit : hlt_bits) {
         hlt_bits_.emplace_back(hlt_bit, 
-                               std::unique_ptr<TTreeReaderValue<float>>(
-                               new TTreeReaderValue<float>(reader,
+                               std::unique_ptr<TTreeReaderValue<int>>(
+                               new TTreeReaderValue<int>(reader,
                                hlt_bit.c_str())));
       }
 
