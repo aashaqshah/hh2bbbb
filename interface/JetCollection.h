@@ -25,19 +25,25 @@ class JetCollection : public std::vector<mut::Jet> {
     TTreeReaderArray<float> * jet_etas_;
     TTreeReaderArray<float> * jet_phis_;
     TTreeReaderArray<float> * jet_masss_;
+    TTreeReaderArray<int> * jet_hadflavs_;
+    TTreeReaderArray<int> * jet_parflavs_;
     std::vector<std::pair<std::string,std::unique_ptr<TTreeReaderArray<float>>>> discs_trs_; 
     
     JetCollection() : 
      jet_pts_(nullptr),
      jet_etas_(nullptr),
      jet_phis_(nullptr),
-     jet_masss_(nullptr) {}
+     jet_masss_(nullptr),
+     jet_hadflavs_(nullptr),
+     jet_parflavs_(nullptr) {}
 
-    JetCollection(TTreeReader & reader, std::vector<std::string> discs = {"CSV"}) : 
+    JetCollection(TTreeReader & reader, std::vector<std::string> discs = {"CSV","CMVAV2"}) : 
      jet_pts_(   new TTreeReaderArray<float>(reader, "Jet_pt"  )),
      jet_etas_(  new TTreeReaderArray<float>(reader, "Jet_eta" )),
      jet_phis_(  new TTreeReaderArray<float>(reader, "Jet_phi" )),
-     jet_masss_( new TTreeReaderArray<float>(reader, "Jet_mass"))
+     jet_masss_( new TTreeReaderArray<float>(reader, "Jet_mass")),
+     jet_hadflavs_( new TTreeReaderArray<int>(reader, "Jet_hadronFlavour")),
+     jet_parflavs_( new TTreeReaderArray<int>(reader, "Jet_partonFlavour"))
     {
       for (const auto & disc : discs) {
         discs_trs_.emplace_back(disc,                                                                 
@@ -77,7 +83,8 @@ class JetCollection : public std::vector<mut::Jet> {
                                  (*disc_trs.second)[i]);
         } 
         this->back().setDiscriminatorPairs(disPairs);
-
+        this->back().setHadronFlavour((*jet_hadflavs_)[i]);
+        this->back().setPartonFlavour((*jet_parflavs_)[i]);
         
       }
     }
