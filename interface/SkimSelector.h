@@ -9,6 +9,7 @@
 #include "TriggerFilter.h"
 #include "JetSelection.h"
 #include "FullWriter.h"
+#include "FreeJetTagged.h"
 
 
 template <class EventClass> class SkimSelector : public BaseSelector<EventClass> {
@@ -30,7 +31,11 @@ template <class EventClass> class SkimSelector : public BaseSelector<EventClass>
       this->addOperator(new EventCounter<EventClass>());
       this->addOperator(new DiJetPairSelection<EventClass>(4));
       this->addOperator(new EventCounter<EventClass>());
+      this->addOperator(new JetPlotter<EventClass>({}, false)); 
       this->addOperator(new FullWriter<EventClass>(true));
+      this->addOperator(new FreeJetTagged<EventClass>("CSV",0.460));
+      this->addOperator(new EventCounter<EventClass>());
+      this->addOperator(new JetPlotter<EventClass>({}, true)); 
     }
 
     virtual ~SkimSelector() {}

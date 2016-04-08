@@ -77,11 +77,20 @@ template <class EventClass> class DiJetPairSelection : public BaseOperator<Event
       ev.dijets_.emplace_back(ev.jets_.at(0) + ev.jets_.at(1));
       ev.dijets_.emplace_back(ev.jets_.at(2) + ev.jets_.at(3));
 
+      std::string disc_ = "CSV";
+
+      // sort in discriminator order 
+      auto comparator = [&](mut::Jet a, mut::Jet b){ 
+        return a.getDiscriminator(disc_) < b.getDiscriminator(disc_); };
+
       ev.free_is_.clear();
-      ev.free_is_.emplace_back(3);
+      if (n_fix_jets_ != 4) ev.free_is_.emplace_back(3);
+      if (n_fix_jets_ == 4) ev.free_is_.emplace_back(
+          std::distance(ev.jets_.begin(), std::min_element(ev.jets_.begin(), ev.jets_.begin()+4,comparator)));
 
       return true;
     }
+
 
     virtual std::string get_name() {
       auto name = std::string{"dijets_pair_selection_min_mass_diff_order_mass_"};
