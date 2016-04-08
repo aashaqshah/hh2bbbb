@@ -5,4 +5,5 @@
   <class name="PairingSelector<ExtEvent>"/>
   <class name="CombinationSelector<ExtEvent>"/>
   <class name="MixingSelector<ExtEvent>"/>
+  <class name="SkimSelector<ExtEvent>"/>
 </lcgdict>  
