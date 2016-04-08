@@ -20,6 +20,7 @@ template <class EventClass> class FullWriter : public BaseOperator<EventClass> {
     mut::EventInfo * eventInfo = nullptr;
     std::vector<mut::Jet> * pfjets = nullptr;
     mut::MET * pfmet = nullptr;
+    std::vector<mut::Candidate> * b_quarks_hs = nullptr;
 
 
     TTree tree_{"tree","Tree using simplified mut::dataformats"};
@@ -45,6 +46,8 @@ template <class EventClass> class FullWriter : public BaseOperator<EventClass> {
                    &pfjets, 64000, 1);
       tree_.Branch("pfmet","mut::MET",
                    &pfmet, 64000, 1);
+      tree_.Branch("GenBQuarkFromH","std::vector<mut::Candidate>",
+                   &b_quarks_hs, 64000, 1);
 
 
       tree_.SetDirectory(tdir);
@@ -60,12 +63,14 @@ template <class EventClass> class FullWriter : public BaseOperator<EventClass> {
       eventInfo = new mut::EventInfo(ev.eventInfo_);
       pfjets = new std::vector<mut::Jet>(ev.jets_); 
       pfmet = new mut::MET(ev.met_);
+      b_quarks_hs = new std::vector<mut::Candidate>(ev.b_quarks_hs_);
 
       tree_.Fill();
 
       delete eventInfo;
       delete pfjets;
       delete pfmet;
+      delete b_quarks_hs;
 
       return true;
     }

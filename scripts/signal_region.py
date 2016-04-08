@@ -1,15 +1,18 @@
 #!/usr/bin/env python 
 
 import ROOT
-from ROOT import ExtEvent as Event
+from ROOT import VHBBEvent, ThinEvent, ExtEvent
 from ROOT import TChain, BasicSelector,  vector
 from ROOT import TH1, TFile
 
 from di_higgs.hh2bbbb.samples_25ns import mc_samples
 
+thinEvent = True 
+thinEventPath = "skim/"
+
 base_dir = "signal_region/"
 
-max_events = -1000000
+max_events = -100
 inEllipse = True 
 freeJetTagged = True 
 isMC = True
@@ -34,11 +37,18 @@ mc_names=[mc_name for mc_name in mc_names if 'HH' in mc_name]
 for name in mc_names:
     isHH = False
     if "HH" in name: isHH = True
-    selector = BasicSelector(Event)(0, hlt_paths_v, isHH,
-                                    hlt_paths_or_v, inEllipse,
-                                    freeJetTagged)
-    tchain = TChain("tree")
-    n_added = tchain.Add(mc_samples[name]["lustre_path"])
+    if thinEvent:
+        selector = BasicSelector(ExtEvent(ThinEvent))(0, hlt_paths_v, isHH,
+                                                  hlt_paths_or_v, inEllipse,
+                                                  freeJetTagged)
+        tchain = TChain("tree")
+        n_added = tchain.Add(thinEventPath+name+".root")
+    else:    
+        selector = BasicSelector(ExtEvent(VHBBEvent))(0, hlt_paths_v, isHH,
+                                                  hlt_paths_or_v, inEllipse,
+                                                  freeJetTagged)
+        tchain = TChain("tree")
+        n_added = tchain.Add(mc_samples[name]["lustre_path"])
     print "processing {} sample ( {} files)".format(name, n_added)
     if max_events > 0:
         tchain.Process(selector, "ofile="+base_dir+name+".root", max_events)

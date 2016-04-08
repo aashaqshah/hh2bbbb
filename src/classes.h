@@ -10,12 +10,22 @@
 
 namespace {
   struct hh4bbbb_ExtEvent {
-    ExtEvent dummy0; 
-    BaseSelector<ExtEvent> dummy1;
-    BasicSelector<ExtEvent> dummy2;
-    PairingSelector<ExtEvent> dummy3;
-    CombinationSelector<ExtEvent> dummy4;
-    MixingSelector<ExtEvent> dummy5;
-    SkimSelector<ExtEvent> dummy6;
+    VHBBEvent dummya; 
+    ExtEvent<VHBBEvent> dummya0; 
+    BaseSelector<ExtEvent<VHBBEvent>> dummya1;
+    BasicSelector<ExtEvent<VHBBEvent>> dummya2;
+    PairingSelector<ExtEvent<VHBBEvent>> dummya3;
+    CombinationSelector<ExtEvent<VHBBEvent>> dummya4;
+    MixingSelector<ExtEvent<VHBBEvent>> dummya5;
+    SkimSelector<ExtEvent<VHBBEvent>> dummya6;
+    ThinEvent dummyb; 
+    ExtEvent<ThinEvent> dummyb0; 
+    BaseSelector<ExtEvent<ThinEvent>> dummyb1;
+    BasicSelector<ExtEvent<ThinEvent>> dummyb2;
+    PairingSelector<ExtEvent<ThinEvent>> dummyb3;
+    CombinationSelector<ExtEvent<ThinEvent>> dummyb4;
+    MixingSelector<ExtEvent<ThinEvent>> dummyb5;
+    SkimSelector<ExtEvent<ThinEvent>> dummyb6;
+ 
   };
 }

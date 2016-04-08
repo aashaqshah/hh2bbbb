@@ -8,7 +8,9 @@
 #include "GenParticleCollection.h"
 #include "EventInfo.h"
 
-class Event { 
+#include "mut_framework/mut_dataformats/interface/Reader.h"
+
+class VHBBEvent { 
   public:
 
     // read from TTree
@@ -17,16 +19,46 @@ class Event {
     MET met_;
     GenParticleCollection b_quarks_hs_;
 
-    Event() {}
+    VHBBEvent() {}
 
-    Event(TTreeReader & reader, std::vector<std::string> hlt_bits, bool isHH = false) :
+    VHBBEvent(TTreeReader & reader, std::vector<std::string> hlt_bits, bool isHH = false) :
      eventInfo_(reader, hlt_bits),  
    	 jets_(reader),
      met_(reader),
      b_quarks_hs_(reader, "GenBQuarkFromH", isHH)
      {}                   
 
-    virtual ~Event() {};
+    virtual ~VHBBEvent() {};
+
+    virtual void update() {
+      eventInfo_.update();
+      jets_.update();
+      met_.update();
+      b_quarks_hs_.update();
+
+    }
+
+};
+
+class ThinEvent { 
+  public:
+
+    // read from TTree
+    mut::Reader<mut::EventInfo> eventInfo_;
+    mut::Reader<std::vector<mut::Jet>> jets_;
+    mut::Reader<mut::MET> met_;
+    mut::Reader<std::vector<mut::Candidate>> b_quarks_hs_;
+
+    ThinEvent() {}
+
+    ThinEvent(TTreeReader & reader, std::vector<std::string> hlt_bits, bool isHH = false) :
+     eventInfo_(reader, "eventInfo" ),  
+   	 jets_(reader, "pfjets"),
+     met_(reader, "pfmet"),
+     b_quarks_hs_(reader, "GenBQuarkFromH")
+     {}                   
+
+    virtual ~ThinEvent() {};
 
     virtual void update() {
       eventInfo_.update();
@@ -40,7 +72,7 @@ class Event {
 
 typedef std::vector<mut::Candidate> CandidateCollection;
 
-class ExtEvent : public Event {
+template <class EventBase> class ExtEvent : public EventBase {
   public:
 
   CandidateCollection dijets_; 
@@ -49,11 +81,11 @@ class ExtEvent : public Event {
   std::vector<std::size_t> free_is_;
 
   // inherit constructors
-  using Event::Event;
+  using EventBase::EventBase;
   virtual ~ExtEvent() {}
 
   virtual void update() {
-    Event::update();
+    EventBase::update();
     dijets_.clear();
     reco_jet_matchs_.clear();
     free_is_.clear();

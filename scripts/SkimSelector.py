@@ -1,7 +1,7 @@
 #!/usr/bin/env python 
 
 import ROOT
-from ROOT import ExtEvent as Event
+from ROOT import ExtEvent, VHBBEvent 
 from ROOT import TChain, SkimSelector,  vector
 from ROOT import TH1
 
@@ -28,10 +28,11 @@ hlt_paths_or_v = vector("string")()
 for hlt_path in hlt_paths_or: hlt_paths_or_v.push_back(hlt_path)
 
 mc_names = mc_samples.keys()
+#mc_names=[mc_name for mc_name in mc_names if 'HH' in mc_name]
 for name in mc_names:
     isHH = False
     if "HH" in name: isHH = True
-    selector = SkimSelector(Event)(0, hlt_paths_v, isHH,
+    selector = SkimSelector(ExtEvent(VHBBEvent))(0, hlt_paths_v, isHH,
                                    hlt_paths_or_v)
     tchain = TChain("tree")
     tchain.Add(mc_samples[name]["lustre_path"])
