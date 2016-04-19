@@ -21,9 +21,9 @@ class VHBBEvent {
 
     VHBBEvent() {}
 
-    VHBBEvent(TTreeReader & reader, std::vector<std::string> hlt_bits, bool isHH = false) :
+    VHBBEvent(TTreeReader & reader, std::vector<std::string> hlt_bits, bool isHH = false, bool isData = false) :
      eventInfo_(reader, hlt_bits),  
-   	 jets_(reader),
+   	 jets_(reader, isData),
      met_(reader),
      b_quarks_hs_(reader, "GenBQuarkFromH", isHH)
      {}                   
@@ -51,7 +51,7 @@ class ThinEvent {
 
     ThinEvent() {}
 
-    ThinEvent(TTreeReader & reader, std::vector<std::string> hlt_bits, bool isHH = false) :
+    ThinEvent(TTreeReader & reader, std::vector<std::string> hlt_bits, bool isHH = false, bool isData = false) :
      eventInfo_(reader, "eventInfo" ),  
    	 jets_(reader, "pfjets"),
      met_(reader, "pfmet"),

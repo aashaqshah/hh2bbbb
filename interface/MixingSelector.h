@@ -9,6 +9,7 @@
 #include "TriggerFilter.h"
 #include "JetSelection.h"
 #include "MixingWriter.h"
+#include "NotOperator.h"
 
 
 template <class EventClass> class MixingSelector : public BaseSelector<EventClass> {
@@ -16,9 +17,9 @@ template <class EventClass> class MixingSelector : public BaseSelector<EventClas
   public:
 
 
-  MixingSelector(TTree * /*tree*/ =0, std::vector<std::string> hlt_bits = {}, bool isHH = true,
-      std::vector<std::string> hlt_bits_or = {}) :
-    BaseSelector<EventClass>(0,hlt_bits, isHH)
+  MixingSelector(TTree * /*tree*/ =0, std::vector<std::string> hlt_bits = {}, bool isHH = true, bool isData = false,
+      std::vector<std::string> hlt_bits_or = {}, bool SR = false) :
+    BaseSelector<EventClass>(0,hlt_bits, isHH, isData)
     {
       std::size_t n_CSV = 2;
       this->addOperator(new EventCounter<EventClass>());
@@ -26,9 +27,15 @@ template <class EventClass> class MixingSelector : public BaseSelector<EventClas
       this->addOperator(new EventCounter<EventClass>());
       this->addOperator(new JetSelection<EventClass>(2.5, 20., 4));
       this->addOperator(new EventCounter<EventClass>());
-      this->addOperator(new BTagJetSelection<EventClass>("CSV", 0.890, n_CSV));
+      this->addOperator(new BTagJetSelection<EventClass>("CSV", 0.800, n_CSV));
       this->addOperator(new EventCounter<EventClass>());
+      this->addOperator(new DiJetPairSelection<EventClass>(4));
+      this->addOperator(new EventCounter<EventClass>());
+      this->addOperator(new NotOperator<WithinRectangle<EventClass>, EventClass>());
+      this->addOperator(new EventCounter<EventClass>());
+      this->addOperator(new DiHiggsPlotter<EventClass>({}, true));
       this->addOperator(new MixingWriter<EventClass>(true));
+
     }
 
   virtual ~MixingSelector() {}

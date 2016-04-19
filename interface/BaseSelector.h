@@ -37,8 +37,8 @@ template <class EventClass> class BaseSelector : public TSelector {
   std::vector<std::unique_ptr<BaseOperator<EventClass>>> ops_;
 
 
-  BaseSelector(TTree * /*tree*/ =0, std::vector<std::string> hlt_bits = {}, bool isHH = false) :
-    ev_(reader_, hlt_bits, isHH)
+  BaseSelector(TTree * /*tree*/ =0, std::vector<std::string> hlt_bits = {}, bool isHH = false, bool isData = false) :
+    ev_(reader_, hlt_bits, isHH, isData)
     {
        
     }

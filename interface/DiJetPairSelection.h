@@ -272,3 +272,40 @@ template <class EventClass> class WithinEllipse : public BaseOperator<EventClass
 
 };
 
+template <class EventClass> class WithinRectangle: public BaseOperator<EventClass> {
+
+  public:
+
+    double x_min_;
+    double x_max_;
+    double y_min_;
+    double y_max_;
+
+
+    WithinRectangle( double x_min = 80., double x_max = 160.,
+                   double y_min = 80., double y_max = 160.) :
+       x_min_(x_min),
+       x_max_(x_max),
+       y_min_(y_min),
+       y_max_(y_max) {}
+    virtual ~WithinRectangle() {}
+
+    virtual bool process( EventClass & ev ) {
+
+      // get mass coordinates
+      double x{ev.dijets_.at(0).mass()};
+      double y{ev.dijets_.at(1).mass()};
+
+      // check if in rectangle 
+      bool inRectangle{ (x > x_min_) && (x < x_max_) && (y > y_min_) && (y < y_max_)}; 
+      return inRectangle;
+    }
+
+    virtual std::string get_name() {
+      auto name = std::string{"within_rectangle"};
+      return name;
+    }
+
+};
+
+

@@ -19,7 +19,8 @@ class JetCollection : public std::vector<mut::Jet> {
 
   public:
 
-    
+    bool isData_;
+
     // TTreeReaderValues for reading from VHBB_HEPPY
     TTreeReaderArray<float> * jet_pts_;
     TTreeReaderArray<float> * jet_etas_;
@@ -30,6 +31,7 @@ class JetCollection : public std::vector<mut::Jet> {
     std::vector<std::pair<std::string,std::unique_ptr<TTreeReaderArray<float>>>> discs_trs_; 
     
     JetCollection() : 
+     isData_(false),
      jet_pts_(nullptr),
      jet_etas_(nullptr),
      jet_phis_(nullptr),
@@ -37,13 +39,12 @@ class JetCollection : public std::vector<mut::Jet> {
      jet_hadflavs_(nullptr),
      jet_parflavs_(nullptr) {}
 
-    JetCollection(TTreeReader & reader, std::vector<std::string> discs = {"CSV","CMVAV2"}) : 
+    JetCollection(TTreeReader & reader, bool isData = false, std::vector<std::string> discs = {"CSV","CMVAV2"}) : 
+     isData_(isData), 
      jet_pts_(   new TTreeReaderArray<float>(reader, "Jet_pt"  )),
      jet_etas_(  new TTreeReaderArray<float>(reader, "Jet_eta" )),
      jet_phis_(  new TTreeReaderArray<float>(reader, "Jet_phi" )),
-     jet_masss_( new TTreeReaderArray<float>(reader, "Jet_mass")),
-     jet_hadflavs_( new TTreeReaderArray<int>(reader, "Jet_hadronFlavour")),
-     jet_parflavs_( new TTreeReaderArray<int>(reader, "Jet_partonFlavour"))
+     jet_masss_( new TTreeReaderArray<float>(reader, "Jet_mass")) 
     {
       for (const auto & disc : discs) {
         discs_trs_.emplace_back(disc,                                                                 
@@ -52,6 +53,13 @@ class JetCollection : public std::vector<mut::Jet> {
                                 ("Jet_btag"+disc).c_str())));                                                      
 
       }
+
+      if (!isData) {
+        jet_hadflavs_ = new TTreeReaderArray<int>(reader, "Jet_hadronFlavour");
+        jet_parflavs_ =  new TTreeReaderArray<int>(reader, "Jet_partonFlavour");
+      }
+
+
     } 
 
     ~JetCollection() {}
@@ -83,8 +91,11 @@ class JetCollection : public std::vector<mut::Jet> {
                                  (*disc_trs.second)[i]);
         } 
         this->back().setDiscriminatorPairs(disPairs);
-        this->back().setHadronFlavour((*jet_hadflavs_)[i]);
-        this->back().setPartonFlavour((*jet_parflavs_)[i]);
+
+        if (!isData_) {
+          this->back().setHadronFlavour((*jet_hadflavs_)[i]);
+          this->back().setPartonFlavour((*jet_parflavs_)[i]);
+        }
         
       }
     }
