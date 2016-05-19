@@ -6,6 +6,7 @@
 #include "di_higgs/hh2bbbb/interface/MixingSelector.h"
 #include "di_higgs/hh2bbbb/interface/SkimSelector.h"
 #include "di_higgs/hh2bbbb/interface/Event.h"
+#include "di_higgs/hh2bbbb/interface/Hemisphere.h"
 
 
 namespace {
@@ -26,6 +27,8 @@ namespace {
     CombinationSelector<ExtEvent<ThinEvent>> dummyb4;
     MixingSelector<ExtEvent<ThinEvent>> dummyb5;
     SkimSelector<ExtEvent<ThinEvent>> dummyb6;
+    Hemisphere dummyc; 
+    std::vector<Hemisphere> dummycvec; 
  
   };
 }

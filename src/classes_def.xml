@@ -15,4 +15,6 @@
   <class name="CombinationSelector<ExtEvent<ThinEvent>>"/>
   <class name="MixingSelector<ExtEvent<ThinEvent>>"/>
   <class name="SkimSelector<ExtEvent<ThinEvent>>"/>
+  <class name="Hemisphere"/>
+  <class name="std::vector<Hemisphere>"/>
 </lcgdict>  

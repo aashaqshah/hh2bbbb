@@ -7,7 +7,7 @@ from ROOT import TH1
 
 from di_higgs.hh2bbbb.samples_25ns import mc_samples
 
-max_events = -100 
+max_events = 10000
 
 TH1.AddDirectory(False)
 
@@ -43,7 +43,7 @@ for name in mc_names:
 process_data = True 
 if process_data:
     sample_name = "/lustre/cmswork/hh/VHBBHeppyV21/BTagCSV/tree_*.root"
-    name = "BTagCSV_CR"
+    name = "BTagCSV"
     isHH = False
     isData = True
     selector = MixingSelector(ExtEvent(VHBBEvent))(0, hlt_paths_v, isHH, isData,

@@ -59,18 +59,13 @@ template <class EventClass> class FullWriter : public BaseOperator<EventClass> {
     virtual bool process( EventClass & ev ) {
 
 
-      // to fill tree
-      eventInfo = new mut::EventInfo(ev.eventInfo_);
-      pfjets = new std::vector<mut::Jet>(ev.jets_); 
-      pfmet = new mut::MET(ev.met_);
-      b_quarks_hs = new std::vector<mut::Candidate>(ev.b_quarks_hs_);
+      // to fill tree redirect pointers
+      eventInfo = dynamic_cast<mut::EventInfo *>(&ev.eventInfo_);
+      pfjets = dynamic_cast<std::vector<mut::Jet> *>(&ev.jets_); 
+      pfmet = dynamic_cast<mut::MET *>(&ev.met_);
+      b_quarks_hs = dynamic_cast<std::vector<mut::Candidate> * >(&ev.b_quarks_hs_);
 
       tree_.Fill();
-
-      delete eventInfo;
-      delete pfjets;
-      delete pfmet;
-      delete b_quarks_hs;
 
       return true;
     }

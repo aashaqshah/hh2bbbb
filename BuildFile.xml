@@ -3,6 +3,8 @@
 <use name="rootcore"/>
 <use name="rootgraphics"/>
 <use name="roottmva"/>
+<use name="rootminuit2"/> 
+<use name="rootmath"/>
 <use name="mut_framework/mut_dataformats"/>
 <flags CXXFLAGS="-lGenVector"/>
 <Flags ROOTMAP="no"/>

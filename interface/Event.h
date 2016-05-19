@@ -7,6 +7,7 @@
 #include "MET.h"
 #include "GenParticleCollection.h"
 #include "EventInfo.h"
+#include "Hemisphere.h"
 
 #include "mut_framework/mut_dataformats/interface/Reader.h"
 
@@ -79,6 +80,10 @@ template <class EventBase> class ExtEvent : public EventBase {
   std::vector<std::set<std::size_t>> reco_jet_matchs_; 
   // indexes of jet chosen by min mass diff 
   std::vector<std::size_t> free_is_;
+  // tranverse thrust phi
+  double thrust_phi_ = -1.;
+  // hemispheres (rotated and pz positive)
+  std::vector<Hemisphere> hems_; 
 
   // inherit constructors
   using EventBase::EventBase;
@@ -89,6 +94,8 @@ template <class EventBase> class ExtEvent : public EventBase {
     dijets_.clear();
     reco_jet_matchs_.clear();
     free_is_.clear();
+    thrust_phi_ = -1.;
+    hems_.clear();
   }
 
 };
