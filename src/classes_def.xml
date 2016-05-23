@@ -7,6 +7,7 @@
   <class name="CombinationSelector<ExtEvent<VHBBEvent>>"/>
   <class name="MixingSelector<ExtEvent<VHBBEvent>>"/>
   <class name="SkimSelector<ExtEvent<VHBBEvent>>"/>
+  <class name="FrankSelector<ExtEvent<VHBBEvent>>"/>
   <class name="ThinEvent"/>    
   <class name="ExtEvent<ThinEvent>"/>    
   <class name="BaseSelector<ExtEvent<ThinEvent>>"/>
@@ -15,6 +16,7 @@
   <class name="CombinationSelector<ExtEvent<ThinEvent>>"/>
   <class name="MixingSelector<ExtEvent<ThinEvent>>"/>
   <class name="SkimSelector<ExtEvent<ThinEvent>>"/>
+  <class name="FrankSelector<ExtEvent<ThinEvent>>"/>
   <class name="Hemisphere"/>
   <class name="std::vector<Hemisphere>"/>
 </lcgdict>  

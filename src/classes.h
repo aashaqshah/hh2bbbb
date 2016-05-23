@@ -7,6 +7,7 @@
 #include "di_higgs/hh2bbbb/interface/SkimSelector.h"
 #include "di_higgs/hh2bbbb/interface/Event.h"
 #include "di_higgs/hh2bbbb/interface/Hemisphere.h"
+#include "di_higgs/hh2bbbb/interface/FrankSelector.h"
 
 
 namespace {
@@ -19,6 +20,7 @@ namespace {
     CombinationSelector<ExtEvent<VHBBEvent>> dummya4;
     MixingSelector<ExtEvent<VHBBEvent>> dummya5;
     SkimSelector<ExtEvent<VHBBEvent>> dummya6;
+    FrankSelector<ExtEvent<VHBBEvent>> dummya7;
     ThinEvent dummyb; 
     ExtEvent<ThinEvent> dummyb0; 
     BaseSelector<ExtEvent<ThinEvent>> dummyb1;
@@ -27,6 +29,7 @@ namespace {
     CombinationSelector<ExtEvent<ThinEvent>> dummyb4;
     MixingSelector<ExtEvent<ThinEvent>> dummyb5;
     SkimSelector<ExtEvent<ThinEvent>> dummyb6;
+    FrankSelector<ExtEvent<ThinEvent>> dummyb7;
     Hemisphere dummyc; 
     std::vector<Hemisphere> dummycvec; 
  
