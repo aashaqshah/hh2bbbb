@@ -44,9 +44,10 @@ template <class EventClass> class BaseSelector : public TSelector {
     }
   virtual ~BaseSelector() {}
 
-  virtual bool addOperator( BaseOperator<EventClass> * op ) { 
+  // return BaseOperator ref so functions can be applied
+  virtual BaseOperator<EventClass> & addOperator( BaseOperator<EventClass> * op ) { 
     ops_.emplace_back(op);
-    return true;
+    return *ops_.back();
   }
 
   // TSelector functions
