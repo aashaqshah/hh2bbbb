@@ -256,9 +256,14 @@ template <class EventClass> class HemisphereMixer : public BaseOperator<EventCla
         const auto & hem_v = hem_m_.at(h_cat); 
         for (std::size_t h_f = 0; h_f < knn_; h_f++) { 
           b_hs.emplace_back(hem_v.at(index_nns.at(h_f)));
+          auto & sel_hem_jets = b_hs.back().jets_;
+          for (auto & j : sel_hem_jets) { 
+            if (h.d_phi_inv_)  j.SetPhi(-j.Phi()); 
+            auto n_phi = ROOT::Math::VectorUtil::Phi_mpi_pi(j.Phi() + h.p_phi_);
+            j.SetPhi(n_phi);
+            if (h.sumPz_inv_)  j.SetEta(-j.Eta()); 
+          }
         }   
-        std::cout << index_nns << std::endl;
-        std::cout << dist_nns << std::endl;
       }
 
       return true;

@@ -9,6 +9,7 @@
 #include "FullWriter.h"
 #include "ThrustAxisFinder.h"
 #include "HemisphereMixer.h"
+#include "FrankWriter.h"
 
 
 template <class EventClass> class FrankSelector : public BaseSelector<EventClass> {
@@ -28,6 +29,7 @@ template <class EventClass> class FrankSelector : public BaseSelector<EventClass
       TFile * tfile =  new TFile(tfile_name.c_str());
       TTree * hem_tree = dynamic_cast<TTree *>(tfile->Get("hem_tree"));
       this->addOperator(new HemisphereMixer<EventClass>(hem_tree));
+      this->addOperator(new FrankWriter<EventClass>());
 
     }
 

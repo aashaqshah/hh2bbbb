@@ -20,9 +20,13 @@ template <class EventClass> class ThrustAxisFinder : public BaseOperator<EventCl
 
   public:
 
-    std::size_t n_steps_phi_scan = 21;
+    std::size_t n_steps_phi_scan_;
+    std::size_t fancyMinimizer_;
 
-    ThrustAxisFinder(){}
+    ThrustAxisFinder(std::size_t n_steps_phi_scan = 361,
+                     bool fancyMinimizer = false) : 
+      n_steps_phi_scan_(n_steps_phi_scan),
+      fancyMinimizer_(fancyMinimizer) {}
     virtual ~ThrustAxisFinder() {}
 
     virtual bool process( EventClass & ev ) {
@@ -45,8 +49,8 @@ template <class EventClass> class ThrustAxisFinder : public BaseOperator<EventCl
       // first need to get an initial value for phi with a simple scan
       double best_t_phi = 0;
       double min_neg_thrust = 0; // will be negative
-      double phi_step = M_PI/(n_steps_phi_scan-1);
-      for (std::size_t i=0; i < n_steps_phi_scan; i++ ) {
+      double phi_step = M_PI/(n_steps_phi_scan_-1);
+      for (std::size_t i=0; i < n_steps_phi_scan_; i++ ) {
         double phi = i*phi_step;
         double neg_thrust = neg_thrust_f(phi);    
         if (neg_thrust < min_neg_thrust) {
@@ -55,14 +59,17 @@ template <class EventClass> class ThrustAxisFinder : public BaseOperator<EventCl
         } 
       }
 
-      ROOT::Math::Functor1D neg_thrust_fc(neg_thrust_f); 
+      if (fancyMinimizer_) {
 
-      ROOT::Math::GSLMinimizer1D minzr;
-      // minization only around scan min
-      minzr.SetFunction(neg_thrust_fc, best_t_phi,
-                        best_t_phi - phi_step, best_t_phi + phi_step);
-      // max number of f calls, abs tol or rel_tol
-      minzr.Minimize(500,1e-5*M_PI, 0.);
+        ROOT::Math::Functor1D neg_thrust_fc(neg_thrust_f); 
+
+        ROOT::Math::GSLMinimizer1D minzr;
+        // minization only around scan min
+        minzr.SetFunction(neg_thrust_fc, best_t_phi,
+                          best_t_phi - phi_step, best_t_phi + phi_step);
+        // max number of f calls, abs tol or rel_tol
+        minzr.Minimize(500,1e-5*M_PI, 0.);
+      }
 
 
       // only get phi in [0,PI] (two minima in [-PI,PI])

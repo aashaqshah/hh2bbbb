@@ -7,7 +7,7 @@ from ROOT import TH1
 
 from di_higgs.hh2bbbb.samples_25ns import mc_samples
 
-max_events = 10000
+max_events = -10000
 
 TH1.AddDirectory(False)
 

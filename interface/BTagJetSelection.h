@@ -6,6 +6,15 @@
 #include "BaseOperator.h"
 #include "mut_framework/mut_dataformats/interface/Jet.h"
 
+
+inline void order_jets_by_disc(std::vector<mut::Jet> & jets, std::string & disc) {
+      // sort in discriminator order 
+      auto comparator = [&](mut::Jet a, mut::Jet b){ 
+        return a.getDiscriminator(disc) > b.getDiscriminator(disc); };
+      std::sort(jets.begin(), jets.end(), comparator );
+}
+
+
 template <class EventClass> class BTagJetSelection : public BaseOperator<EventClass> {
 
   public:
@@ -23,10 +32,8 @@ template <class EventClass> class BTagJetSelection : public BaseOperator<EventCl
 
     virtual bool process( EventClass & ev ) {
 
-      // sort in discriminator order 
-      auto comparator = [&](mut::Jet a, mut::Jet b){ 
-        return a.getDiscriminator(disc_) > b.getDiscriminator(disc_); };
-      std::sort(ev.jets_.begin(), ev.jets_.end(), comparator );
+      // order by discriminator
+      order_jets_by_disc(ev.jets_, disc_);
 
       // check that min_number jet pass d_value    
       for (std::size_t i=0; i < min_number_; i++) {
