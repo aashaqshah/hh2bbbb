@@ -6,8 +6,10 @@
 #include <math.h>
 #include <cmath>
 
+#include "TChain.h"
 #include "TTreeReader.h"
 #include "TTreeReaderValue.h"
+#include "TEntryList.h"
 
 #include "BaseOperator.h"
 #include "Hemisphere.h"
@@ -136,7 +138,7 @@ template <class EventClass> class HemisphereMixer : public BaseOperator<EventCla
     // number of neighbours to keep for each hemisphere
     std::size_t knn_;
 
-    HemisphereMixer( TTree * tree,
+    HemisphereMixer( TChain * tc_hm,
                      FuncIVec funcIVec = { FuncI( [] (const Hemisphere & hem) {
                                             int nJets = Hemisphere::nJets(hem);
                                             return ( nJets > 3 ? 4 : nJets);
@@ -149,25 +151,42 @@ template <class EventClass> class HemisphereMixer : public BaseOperator<EventCla
                                            FuncD(&Hemisphere::thrustMinor),
                                            FuncD(&Hemisphere::sumPz),
                                            FuncD(&Hemisphere::invMass)},
-                     Scaling scaling = Scaling::subset,
-                     std::size_t knn = 2, std::size_t last = 0) :
+                     Scaling scaling = Scaling::set,
+                     std::size_t knn = 2) :
       funcIVec_(funcIVec),
       funcDVec_(funcDVec),
       scaling_(scaling),
       var_stds_(funcDVec_.size(), 0.0),
       knn_(knn) {
 
-      TTreeReader hem_reader(tree);
-      if (last != 0) hem_reader.SetLastEntry(last);
+      // setup readers  
+      TTreeReader hem_reader(tc_hm);
       TTreeReaderValue<std::vector<Hemisphere>> hems(hem_reader, "hems");
-
-      // read whole tree and push hemispheres to map categories  
-      while (hem_reader.Next()) {
-        for (const auto & hem : *hems) {
-          IntVec cat;
-          for (const auto & funcI : funcIVec_) cat.emplace_back(funcI(hem));
-          if (hem_m_.count(cat) < 1) hem_m_[cat] = {};
-          hem_m_.at(cat).emplace_back(hem);
+      auto elist = tc_hm->GetEntryList();
+      if (elist != nullptr) {
+        // iterate over all events in event list
+        std::size_t list_entries = elist->GetN();
+        int treenum = 0;
+        for (std::size_t l_e=0; l_e < list_entries; l_e++) {
+          auto treeEntry = elist->GetEntryAndTree(l_e,treenum);
+          auto chainEntry = treeEntry+tc_hm->GetTreeOffset()[treenum];
+          hem_reader.SetEntry(chainEntry);
+          for (const auto & hem : *hems) {
+            IntVec cat;
+            for (const auto & funcI : funcIVec_) cat.emplace_back(funcI(hem));
+            if (hem_m_.count(cat) < 1) hem_m_[cat] = {};
+            hem_m_.at(cat).emplace_back(hem);
+          }
+        }
+      } else {  
+        // read whole tree and push hemispheres to map categories  
+        while (hem_reader.Next()) {
+          for (const auto & hem : *hems) {
+            IntVec cat;
+            for (const auto & funcI : funcIVec_) cat.emplace_back(funcI(hem));
+            if (hem_m_.count(cat) < 1) hem_m_[cat] = {};
+            hem_m_.at(cat).emplace_back(hem);
+          }
         }
       }
 

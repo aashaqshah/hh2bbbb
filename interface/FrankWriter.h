@@ -37,7 +37,7 @@ template <class EventClass> class FrankWriter : public BaseOperator<EventClass> 
     std::string dir_;
 
 
-    TTree tree_{"tree","Tree wth mixed events"};
+    TTree tree_{"mix_tree","Tree wth mixed events"};
 
      FrankWriter(std::size_t n_h_mix = 1, std::size_t n_h_skip = 1,
                 bool root = false, std::string dir = "") :
