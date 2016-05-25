@@ -36,6 +36,9 @@ template <class EventClass> class BaseSelector : public TSelector {
   // vector of operations
   std::vector<std::unique_ptr<BaseOperator<EventClass>>> ops_;
 
+  // human readable event origin
+  std::string pName_ = "";
+
 
   BaseSelector(TTree * /*tree*/ =0, std::vector<std::string> hlt_bits = {}, bool isHH = false, bool isData = false) :
     ev_(reader_, hlt_bits, isHH, isData)
@@ -103,6 +106,15 @@ template <class EventClass> void BaseSelector<EventClass>::SlaveBegin(TTree * /*
      std::size_t length = (option.find(";", i_ofile) -  option.find("=", i_ofile) - 1);
      o_filename = option.substr(option.find("=", i_ofile)+1 , length );
    } 
+
+   pName_ = "";
+   std::size_t i_pName = option.find("pName="); 
+   if (i_pName != std::string::npos) {
+     std::size_t length = (option.find(";", i_pName) -  option.find("=", i_pName) - 1);
+     pName_ = option.substr(option.find("=", i_pName)+1 , length );
+   } 
+
+
    tfile_ = new TFile(o_filename.c_str(), "RECREATE");
    
  
@@ -127,6 +139,7 @@ template <class EventClass> bool  BaseSelector<EventClass>::Process(Long64_t ent
   reader_.SetLocalEntry(entry);
   // update event objects
   ev_.update();
+  if (pName_ != "") ev_.eventInfo_.setPName(pName_);
 
   for (auto & op : ops_) {
     if (!op->process(ev_)) return false; 

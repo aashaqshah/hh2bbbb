@@ -24,8 +24,14 @@ hlt_paths_or = hlt_paths[0:1] +  hlt_paths[2:3]
 hlt_paths_or_v = vector("string")()
 for hlt_path in hlt_paths_or: hlt_paths_or_v.push_back(hlt_path)
 
+sub_strs = ['QCD_HT','HH', 'TTJets']
 mc_names = mc_samples.keys()
-mc_names = []
+mc_names=[n for n in mc_names if any(s in n for s in sub_strs)]
+
+
+o_dir = "./mixing/" 
+p_par = "ofile={}.root;pName={}"
+
 for name in mc_names:
     isHH = False
     isData = False 
@@ -36,11 +42,11 @@ for name in mc_names:
     tchain.Add(mc_samples[name]["lustre_path"])
     print "processing {} sample".format(name)
     if max_events > 0:
-        tchain.Process(selector, "ofile="+"./mixing/"+name+".root", max_events)
+        tchain.Process(selector, p_par.format(o_dir+name, name), max_events)
     else:
-        tchain.Process(selector, "ofile="+"./mixing/"+name+".root")
+        tchain.Process(selector, p_par.format(o_dir+name, name))
 
-process_data = True 
+process_data = False 
 if process_data:
     sample_name = "/lustre/cmswork/hh/VHBBHeppyV21/BTagCSV/tree_*.root"
     name = "BTagCSV"
