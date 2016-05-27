@@ -40,6 +40,8 @@ sam_names=[n for n in sam_names if any(s in n for s in sub_strs)]
 f_signal = 100.
 sam_factors = {k : f_signal for k in sam_names if 'HH' in k}
 
+mult =  5
+
 input_path = "mixing/"
 output_path = "mixed/"
 # construct output file base name
@@ -62,7 +64,7 @@ for sam_name in sam_names: tc_hm.Add(input_path+sam_name+".root")
 tc_hm.SetEventList(el)
 selector = FrankSelector(ExtEvent(ThinEvent))(0, hlt_paths_v, isHH,
                                               isData, hlt_paths_or_v,
-                                              tc_hm)
+                                              tc_hm, mult)
 
 # setup event tchain and set event list
 ev_tc = TChain("tree")

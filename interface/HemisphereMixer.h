@@ -152,7 +152,7 @@ template <class EventClass> class HemisphereMixer : public BaseOperator<EventCla
                                            FuncD(&Hemisphere::sumPz),
                                            FuncD(&Hemisphere::invMass)},
                      Scaling scaling = Scaling::set,
-                     std::size_t knn = 2) :
+                     std::size_t knn = 10) :
       funcIVec_(funcIVec),
       funcDVec_(funcDVec),
       scaling_(scaling),

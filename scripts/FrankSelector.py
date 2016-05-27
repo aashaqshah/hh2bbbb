@@ -4,6 +4,7 @@ import ROOT
 from ROOT import ThinEvent, ExtEvent
 from ROOT import TChain, FrankSelector,  vector
 from ROOT import TH1, TFile
+from ROOT import gInterpreter
 
 from di_higgs.hh2bbbb.samples_25ns import mc_samples
 
@@ -30,8 +31,14 @@ thinEventPath = "mixing/"
 name = "BTagCSV"
 isHH = False
 isData = True 
+mult = 5
+
+
+tc_hm = TChain("hem_tree")
+tc_hm.Add(thinEventPath+name+".root")
 selector = FrankSelector(ExtEvent(ThinEvent))(0, hlt_paths_v, isHH,
-                                              isData, hlt_paths_or_v)
+                                              isData, hlt_paths_or_v, tc_hm, mult)
+
 tchain = TChain("tree")
 n_added = tchain.Add(thinEventPath+name+".root")
 tchain.Process(selector, "ofile="+base_dir+name+".root", max_events)

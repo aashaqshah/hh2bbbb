@@ -20,7 +20,7 @@ template <class EventClass> class FrankSelector : public BaseSelector<EventClass
   FrankSelector(TTree * /*tree*/ =0, std::vector<std::string> hlt_bits = {},
                 bool isHH = true, bool isData = false,
                 std::vector<std::string> hlt_bits_or = {},
-                TChain * tc_hm = nullptr) :
+                TChain * tc_hm = nullptr, std::size_t n_h_mix = 1 ) :
     BaseSelector<EventClass>(0,hlt_bits, isHH, isData)
     {
 
@@ -28,7 +28,7 @@ template <class EventClass> class FrankSelector : public BaseSelector<EventClass
       this->addOperator(new ThrustAxisFinder<EventClass>());
       this->addOperator(new HemisphereProducer<EventClass>());
       this->addOperator(new HemisphereMixer<EventClass>(tc_hm));
-      this->addOperator(new FrankWriter<EventClass>(true));
+      this->addOperator(new FrankWriter<EventClass>(n_h_mix, 1, true));
 
     }
 

@@ -84,13 +84,19 @@ template <class EventClass> class FrankWriter : public BaseOperator<EventClass> 
 
       const auto & bm_hems = ev.best_match_hems_;
 
-      // clear jet collection
-      mix_jets_.clear();
 
       // for each hemisphere i
       for (std::size_t h_i=n_h_skip_; h_i<(n_h_skip_+n_h_mix_); h_i++) {
         // for each hemisphere j
         for (std::size_t h_j=n_h_skip_; h_j<(n_h_skip_+n_h_mix_); h_j++) {
+
+          // rename pName to denote # nn
+          ev.eventInfo_.setPName("nn_"+std::to_string(h_i)+"_"+
+                                 std::to_string(h_j)+"_"+
+                                 ev.eventInfo_.getPName());
+
+          // clear jet collection
+          mix_jets_.clear();
 
           // references for easy access
           const auto jets_i = bm_hems.at(0).at(h_i).jets_;
