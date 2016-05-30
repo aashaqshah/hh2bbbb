@@ -21,8 +21,8 @@ template <class EventClass> class MixingSelector : public BaseSelector<EventClas
 
 
   MixingSelector(TTree * /*tree*/ =0, std::vector<std::string> hlt_bits = {}, bool isHH = true, bool isData = false,
-      std::vector<std::string> hlt_bits_or = {}, bool SR = false) :
-    BaseSelector<EventClass>(0,hlt_bits, isHH, isData)
+      std::vector<std::string> hlt_bits_or = {}, std::vector<std::string> corr_names = {}) :
+    BaseSelector<EventClass>(0,hlt_bits, isHH, isData, corr_names)
     {
       std::size_t n_CSV = 3;
       this->addOperator(new EventCounter<EventClass>());

@@ -28,6 +28,9 @@ class JetCollection : public std::vector<mut::Jet> {
     TTreeReaderArray<float> * jet_masss_;
     TTreeReaderArray<int> * jet_hadflavs_;
     TTreeReaderArray<int> * jet_parflavs_;
+    // for jet corr shifts
+    TTreeReaderArray<float> * jet_corr_;
+    TTreeReaderArray<float> * jet_corr_shifted_;
     std::vector<std::pair<std::string,std::unique_ptr<TTreeReaderArray<float>>>> discs_trs_; 
     
     JetCollection() : 
@@ -37,9 +40,13 @@ class JetCollection : public std::vector<mut::Jet> {
      jet_phis_(nullptr),
      jet_masss_(nullptr),
      jet_hadflavs_(nullptr),
-     jet_parflavs_(nullptr) {}
+     jet_parflavs_(nullptr),
+     jet_corr_(nullptr),
+     jet_corr_shifted_(nullptr) {}
 
-    JetCollection(TTreeReader & reader, bool isData = false, std::vector<std::string> discs = {"CSV","CMVAV2"}) : 
+    JetCollection(TTreeReader & reader, bool isData = false,
+                  const std::vector<std::string> & corr_names = {}, 
+                  const std::vector<std::string> & discs = {"CSV","CMVAV2"}) : 
      isData_(isData), 
      jet_pts_(   new TTreeReaderArray<float>(reader, "Jet_pt"  )),
      jet_etas_(  new TTreeReaderArray<float>(reader, "Jet_eta" )),
@@ -58,7 +65,10 @@ class JetCollection : public std::vector<mut::Jet> {
         jet_hadflavs_ = new TTreeReaderArray<int>(reader, "Jet_hadronFlavour");
         jet_parflavs_ =  new TTreeReaderArray<int>(reader, "Jet_partonFlavour");
       }
-
+      if (corr_names.size() == 2) {
+        jet_corr_ = new TTreeReaderArray<float>(reader, corr_names.at(0).c_str());
+        jet_corr_shifted_ = new TTreeReaderArray<float>(reader, corr_names.at(1).c_str());
+      }
 
     } 
 
@@ -95,6 +105,11 @@ class JetCollection : public std::vector<mut::Jet> {
         if (!isData_) {
           this->back().setHadronFlavour((*jet_hadflavs_)[i]);
           this->back().setPartonFlavour((*jet_parflavs_)[i]);
+        }
+
+        if (jet_corr_ != nullptr) {
+          this->back().SetPt(this->back().Pt()*
+                            (*jet_corr_shifted_)[i]/(*jet_corr_)[i]);
         }
         
       }
