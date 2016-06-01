@@ -19,16 +19,20 @@ class EventInfo : public mut::EventInfo {
     TTreeReaderValue<unsigned int> * run_tr_;
     TTreeReaderValue<unsigned long long> * event_tr_;
     std::vector<std::pair<std::string,std::unique_ptr<TTreeReaderValue<int>>>> hlt_bits_; 
+    std::vector<std::pair<std::string,std::unique_ptr<TTreeReaderValue<float>>>> weights_; 
 
     
     EventInfo() : 
      run_tr_(nullptr),
      event_tr_(nullptr) {}
 
-    EventInfo(TTreeReader & reader, std::vector<std::string> hlt_bits = {} ) : 
+    EventInfo(TTreeReader & reader, std::vector<std::string> hlt_bits = {},
+              bool isData = false) : 
      run_tr_(   new TTreeReaderValue<unsigned int>(reader, "run"  )),
      event_tr_(  new TTreeReaderValue<unsigned long long>(reader, "evt" ))
     {
+      std::vector<std::string> weights = {}; 
+      if (!isData) weights =  {"puWeight", "puWeightUp", "puWeightDown"};
 
       for (const auto & hlt_bit : hlt_bits) {
         hlt_bits_.emplace_back(hlt_bit, 
@@ -37,11 +41,22 @@ class EventInfo : public mut::EventInfo {
                                hlt_bit.c_str())));
       }
 
+      for (const auto & weight : weights) {
+        weights_.emplace_back(weight, 
+                              std::unique_ptr<TTreeReaderValue<float>>(
+                              new TTreeReaderValue<float>(reader,
+                              weight.c_str())));
+      }
+
     } 
 
     ~EventInfo() {}
     
     void update() {
+
+
+      this->weightPairs_.clear();
+      this->filterPairs_.clear();
 
       // update event info 
       this->event_ = **event_tr_;
@@ -53,7 +68,13 @@ class EventInfo : public mut::EventInfo {
                                   (double) **hlt_bit_pair.second >  0.5);
       } 
       this->setFilterPairs(filterPairs);
-      this->weightPairs_.clear();
+
+      std::vector<std::pair<std::string, float>> weightPairs;
+      for (const auto & weight : weights_) {
+        weightPairs.emplace_back( weight.first,
+                                  **weight.second);
+      } 
+      this->setWeightPairs(weightPairs);
 
     }
 };

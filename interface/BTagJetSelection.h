@@ -40,6 +40,24 @@ template <class EventClass> class BTagJetSelection : public BaseOperator<EventCl
         if (ev.jets_.at(i).getDiscriminator(disc_) < d_value_) return false;
       }
 
+      // compute event btag weights
+      std::map<std::string, float> ev_bw_m;
+      for (const auto & jet : ev.jets_) {
+        for (const auto & pair : jet.getJetIDPairs()) {
+          if (pair.first.find("bTagW") != std::string::npos) {
+            if( ev_bw_m.count(pair.first) == 0) { 
+              ev_bw_m[pair.first] = pair.second;
+            } else {
+              ev_bw_m[pair.first] *= pair.second;
+            }
+          }
+        }
+      }
+
+      for (const auto & ev_bw : ev_bw_m) {
+        ev.eventInfo_.emplaceWeight( ev_bw.first, ev_bw.second);
+      }
+
       return true;
     }
 
