@@ -8,6 +8,7 @@
 #include "di_higgs/hh2bbbb/interface/Event.h"
 #include "di_higgs/hh2bbbb/interface/Hemisphere.h"
 #include "di_higgs/hh2bbbb/interface/FrankSelector.h"
+#include "di_higgs/hh2bbbb/interface/ProcessID.h"
 
 
 namespace {
@@ -32,6 +33,5 @@ namespace {
     FrankSelector<ExtEvent<ThinEvent>> dummyb7;
     Hemisphere dummyc; 
     std::vector<Hemisphere> dummycvec; 
- 
   };
 }

@@ -148,3 +148,27 @@ mc_samples["QCD_MuEnrichedPt5_Pt-1000toInf"] = {
   "xs" : 1.62,
   "gen_event" :  3749244.
 }
+
+mc_samples["ZZTo4Q_13TeV"] = {
+  "lustre_path" : "/lustre/cmswork/hh/VHBBHeppyV21/ZZTo4Q_13TeV_amcatnloFXFX_madspin_pythia8/*.root",
+  "xs" : 16.7*0.6991*0.6991,
+  "gen_event" : 30707868. 
+}
+
+mc_samples["ZH_HToBB_ZToQQ"] = {
+  "lustre_path" : "/lustre/cmswork/hh/VHBBHeppyV21/ZH_HToBB_ZToQQ_M125_13TeV_powheg_pythia8/*.root",
+  "xs" : 0.8696*0.577*0.6991,
+  "gen_event" : 496850. 
+}
+
+mc_samples["ttHTobb"] = {
+  "lustre_path" : "/lustre/cmswork/hh/VHBBHeppyV21/ttHTobb_M125_13TeV_powheg_pythia8/*.root",
+  "xs" : 0.,
+  "gen_event" : 0. 
+}
+
+mc_samples["bbHToBB"] = {
+  "lustre_path" : "/lustre/cmswork/hh/VHBBHeppyV21/bbHToBB_M-125_4FS_ybyt_13TeV_amcatnlo/*.root",
+  "xs" : 0.,
+  "gen_event" : 0. 
+}

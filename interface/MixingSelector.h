@@ -21,14 +21,14 @@ template <class EventClass> class MixingSelector : public BaseSelector<EventClas
 
 
   MixingSelector(TTree * /*tree*/ =0, std::vector<std::string> hlt_bits = {}, bool isHH = true, bool isData = false,
-      std::vector<std::string> hlt_bits_or = {}, std::vector<std::string> corr_names = {}) :
-    BaseSelector<EventClass>(0,hlt_bits, isHH, isData, corr_names)
+      std::vector<std::string> hlt_bits_or = {}, std::vector<std::string> corr_names = {}, double corr_factor = 1) :
+    BaseSelector<EventClass>(0,hlt_bits, isHH, isData, corr_names, corr_factor)
     {
       std::size_t n_CSV = 3;
       this->addOperator(new EventCounter<EventClass>());
       this->addOperator(new TriggerFilter<EventClass>(hlt_bits_or));
       this->addOperator(new EventCounter<EventClass>());
-      this->addOperator(new JetSelection<EventClass>(2.5, 20., 4));
+      this->addOperator(new JetSelection<EventClass>(2.5, 30., 4));
       this->addOperator(new EventCounter<EventClass>());
       this->addOperator(new BTagJetSelection<EventClass>("CSV", 0.800, n_CSV));
       this->addOperator(new EventCounter<EventClass>());

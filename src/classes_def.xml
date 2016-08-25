@@ -1,8 +1,8 @@
 <lcgdict>
+  <enum name="processID::ProcessID" />
   <class name="VHBBEvent"/>    
   <class name="ExtEvent<VHBBEvent>"/>    
   <class name="BaseSelector<ExtEvent<VHBBEvent>>"/>
-  <class name="BasicSelector<ExtEvent<VHBBEvent>>"/>
   <class name="PairingSelector<ExtEvent<VHBBEvent>>"/>
   <class name="CombinationSelector<ExtEvent<VHBBEvent>>"/>
   <class name="MixingSelector<ExtEvent<VHBBEvent>>"/>
@@ -11,7 +11,6 @@
   <class name="ThinEvent"/>    
   <class name="ExtEvent<ThinEvent>"/>    
   <class name="BaseSelector<ExtEvent<ThinEvent>>"/>
-  <class name="BasicSelector<ExtEvent<ThinEvent>>"/>
   <class name="PairingSelector<ExtEvent<ThinEvent>>"/>
   <class name="CombinationSelector<ExtEvent<ThinEvent>>"/>
   <class name="MixingSelector<ExtEvent<ThinEvent>>"/>
@@ -19,4 +18,5 @@
   <class name="FrankSelector<ExtEvent<ThinEvent>>"/>
   <class name="Hemisphere"/>
   <class name="std::vector<Hemisphere>"/>
+  <class pattern="BasicSelector*"/>
 </lcgdict>  

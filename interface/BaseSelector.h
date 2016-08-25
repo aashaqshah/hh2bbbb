@@ -41,8 +41,8 @@ template <class EventClass> class BaseSelector : public TSelector {
 
 
   BaseSelector(TTree * /*tree*/ =0, std::vector<std::string> hlt_bits = {}, bool isHH = false,
-    bool isData = false, std::vector<std::string> corr_names = {}) :
-    ev_(reader_, hlt_bits, isHH, isData, corr_names)
+    bool isData = false, std::vector<std::string> corr_names = {}, double corr_factor = 1.0) :
+    ev_(reader_, hlt_bits, isHH, isData, corr_names, corr_factor)
     {
        
     }

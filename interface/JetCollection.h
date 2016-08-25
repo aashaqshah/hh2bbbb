@@ -31,6 +31,7 @@ class JetCollection : public std::vector<mut::Jet> {
     // for jet corr shifts
     TTreeReaderArray<float> * jet_corr_;
     TTreeReaderArray<float> * jet_corr_shifted_;
+    double corr_factor_;
     std::vector<std::pair<std::string,std::unique_ptr<TTreeReaderArray<float>>>> discs_trs_; 
     std::vector<std::pair<std::string,std::unique_ptr<TTreeReaderArray<float>>>> btag_weights_; 
     
@@ -43,10 +44,12 @@ class JetCollection : public std::vector<mut::Jet> {
      jet_hadflavs_(nullptr),
      jet_parflavs_(nullptr),
      jet_corr_(nullptr),
-     jet_corr_shifted_(nullptr) {}
+     jet_corr_shifted_(nullptr),
+     corr_factor_(1.0) {}
 
     JetCollection(TTreeReader & reader, bool isData = false,
                   const std::vector<std::string> & corr_names = {}, 
+                  double corr_factor = 1.0,
                   const std::vector<std::string> & discs = {"CSV","CMVAV2"}) : 
      isData_(isData), 
      jet_pts_(   new TTreeReaderArray<float>(reader, "Jet_pt"  )),
@@ -56,7 +59,9 @@ class JetCollection : public std::vector<mut::Jet> {
      jet_hadflavs_(nullptr),
      jet_parflavs_(nullptr),
      jet_corr_(nullptr),
-     jet_corr_shifted_(nullptr) 
+     jet_corr_shifted_(nullptr),
+     corr_factor_(corr_factor) 
+
     {
       for (const auto & disc : discs) {
         discs_trs_.emplace_back(disc,
@@ -137,8 +142,10 @@ class JetCollection : public std::vector<mut::Jet> {
           this->back().setHadronFlavour((*jet_hadflavs_)[i]);
           this->back().setPartonFlavour((*jet_parflavs_)[i]);
           if (jet_corr_ != nullptr) {
-            this->back().SetPt(this->back().Pt()*
-                              (*jet_corr_shifted_)[i]/(*jet_corr_)[i]);
+            float jet_corr_shifted = (*jet_corr_shifted_)[i];
+            float jet_corr = (*jet_corr_)[i];
+            float jet_corr_scaled = jet_corr+corr_factor_*(jet_corr_shifted-jet_corr);
+            this->back().SetPt(this->back().Pt()*jet_corr_scaled/jet_corr);
          }
         }
       }
